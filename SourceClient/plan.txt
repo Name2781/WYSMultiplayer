@@ -1,0 +1,9 @@
+and new rooms called room_multiplayer, room_multiplayer_join, room_multiplayer_create, room_multiplayer_browser
+
+room_multiplayer has 2 buttons to join or create a game
+
+room_multiplayer_join has 2 text boxes to enter the ip and and the name you want to use
+
+room_multiplayer_create allows you to create a room with a password toggles for if mods are enforeced and if special / hats character api are allowed and set the new you will use for you player
+
+room_multiplayer_browser prompts for a server ip and then will get a list of rooms from that server and display them as a list and alow you to join one

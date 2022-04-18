@@ -1,0 +1,28 @@
+if (player selects make server) {
+	allow host options to be set();
+	make new server with options();
+}
+
+if (player selects join) {
+	prompt for ip();
+	maybe prompt for password();
+	prompt for name();
+	join sevrer();
+}
+
+on (action) {
+	send action rpc/id();
+}
+
+when (action recived) {
+	decode and update data();
+}
+
+if (disconnected) {
+	use reason and kick with reason();
+}
+
+if (banned) {
+	host saves banlist();
+	kick player with ban message();
+}

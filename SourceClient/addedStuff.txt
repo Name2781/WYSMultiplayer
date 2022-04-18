@@ -1,0 +1,2 @@
+new rooms called room_multiplayer, room_multiplayer_join, room_multiplayer_create, room_multiplayer_browser
+new objects called obj_room_multiplayer

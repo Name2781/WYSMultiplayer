@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="GmmlHooker">
+      <HintPath>lib\GmmlHooker.dll</HintPath>
+    </Reference>
+    <Reference Include="GmmlPatcher">
+      <HintPath>lib\GmmlPatcher.dll</HintPath>
+    </Reference>
+    <Reference Include="TSIMPH_API">
+      <HintPath>lib\TSIMPH_API.dll</HintPath>
+    </Reference>
+    <Reference Include="UndertaleModLib">
+      <HintPath>lib\UndertaleModLib.dll</HintPath>
+    </Reference>
+    <Reference Include="WysApi">
+      <HintPath>lib\WysApi.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
