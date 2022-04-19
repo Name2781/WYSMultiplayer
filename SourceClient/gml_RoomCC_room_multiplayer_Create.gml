@@ -32,3 +32,9 @@ if show_question("Host a game?") {
 
     global.state = "inGame";
 }
+
+var socketlist = ds_map_create();
+var Clients = ds_map_create();
+
+global.socketlist = socketlist;
+global.Clients = Clients;
