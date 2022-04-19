@@ -40,17 +40,17 @@ var cmd = buffer_read(buff, buffer_s16 );
 var sock = ds_map_find_value(async_load, "id");
 var inst = ds_map_find_value(global.Clients, sock );
 
-if(cmd==POS_CMD)    
+if(cmd==0) // POS_CMD
 {
     inst.x = buffer_read(buff, buffer_s16);
     inst.y = buffer_read(buff, buffer_s16);
 }
 
-else if(cmd==INFO_CMD)
+else if(cmd==1) // INFO_CMD
 {
     inst.hspeed = buffer_read(buff, buffer_s16);
     inst.vspeed = buffer_read(buff, buffer_s16);
-    inst.peed = buffer_read(buff, buffer_s16);
+    inst.speed = buffer_read(buff, buffer_s16);
     inst.gun_equipped = buffer_read(buff, buffer_s16);
     inst.lookdir = buffer_read(buff, buffer_s16);
 }

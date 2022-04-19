@@ -77,6 +77,8 @@ namespace WYSMultiplayer
 
             mp_room.AddObjectToLayer(data, "obj_multiplayer_manager", "Player");
 
+            mp_room.AddObjectToLayer(data, "obj_player", "Player");
+
             mp_room.CreationCodeId = data.Code.ByName("gml_RoomCC_room_multiplayer_Create");
 
             mp_room.SetupRoom(false);
