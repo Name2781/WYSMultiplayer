@@ -23,7 +23,7 @@ if(global.isHost) {
             
             scr_send_position(obj_player.x, obj_player.y)
         } */
-
+        // TODO: send if the player is jumping and spawn particles
         scr_send_position(obj_player.x, obj_player.y)
 
         scr_send_player_info(obj_player.hspeed, obj_player.vspeed, obj_player.speed, obj_player.gun_equipped, obj_player.lookdir)

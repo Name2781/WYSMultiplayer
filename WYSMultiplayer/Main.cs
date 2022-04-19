@@ -62,14 +62,14 @@ namespace WYSMultiplayer
 
             UndertaleGameObject mp_player_obj = new UndertaleGameObject();
 
-            data.GameObjects.Add(mp_player_obj);
-
             mp_player_obj.Name = data.Strings.MakeString("obj_mp_player");
 
             mp_player_obj.Sprite = data.Sprites.ByName("spr_player");
 
             mp_player_obj.EventHandlerFor(EventType.Draw, EventSubtypeDraw.Draw, data.Strings, data.Code, data.CodeLocals)
                 .AppendGmlSafe(GMLkvp["gml_Object_obj_mp_player_Draw_0"], data);
+
+            data.GameObjects.Add(mp_player_obj);
 
             UndertaleRoom mp_room = Conviences.CreateBlankLevelRoom("room_multiplayer", data);
 
@@ -78,6 +78,11 @@ namespace WYSMultiplayer
             mp_room.AddObjectToLayer(data, "obj_multiplayer_manager", "Player");
 
             mp_room.AddObjectToLayer(data, "obj_player", "Player");
+
+            var bottomWall = mp_room.AddObjectToLayer(data, "obj_wall", "Walls");
+
+            bottomWall.Y = 60;
+            bottomWall.ScaleX = 5;
 
             mp_room.CreationCodeId = data.Code.ByName("gml_RoomCC_room_multiplayer_Create");
 
