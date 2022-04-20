@@ -48,6 +48,8 @@ namespace WYSMultiplayer
 
             CreateScriptFromKVP(data, "scr_send_player_info", "gml_Script_scr_send_player_info", 5);
 
+            CreateScriptFromKVP(data, "scr_recived_packet", "gml_Script_scr_recived_packet", 2);
+
             // gml_RoomCC_room_multiplayer_Create
             data.CreateCode("gml_RoomCC_room_multiplayer_Create", GMLkvp["gml_RoomCC_room_multiplayer_Create"]);
 

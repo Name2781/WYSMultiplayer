@@ -1,7 +1,6 @@
-var limit = 6;
 var iteration = 0;
 
-if (!iteration == 60 / limit)
+if (iteration < 9)
     return false;
 else 
     iteration = 0;

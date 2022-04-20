@@ -4,14 +4,18 @@ var sock = ds_map_find_value(async_load, "socket");
 
 var ip = ds_map_find_value(async_load, "ip");
 
+show_debug_message("type: " + string(t));
+
 switch(t)
 {
     case network_type_connect:
-        show_debug_message("Connecting to " + ip);
+        // show_debug_message("Connecting to " + ip);
 
         ds_list_add( global.socketlist, sock );
     
         var inst = instance_create_layer(0,0,"Player",obj_mp_player);
+
+        show_debug_message(object_get_name(inst));
 
         ds_map_add( global.Clients, sock, inst );
 
@@ -30,26 +34,9 @@ switch(t)
 
     case network_type_data:
         var buff = ds_map_find_value(async_load, "buffer");
-
-        var cmd = buffer_read(buff, buffer_s16 );
-
         var sock = ds_map_find_value(async_load, "id");
-        var inst = ds_map_find_value(global.Clients, sock);
 
-        if(cmd==0) // POS_CMD
-        {
-            inst.x = buffer_read(buff, buffer_s16);
-            inst.y = buffer_read(buff, buffer_s16);
-        }
-
-        else if(cmd==1) // INFO_CMD
-        {
-            inst.hspeed = buffer_read(buff, buffer_s16);
-            inst.vspeed = buffer_read(buff, buffer_s16);
-            inst.speed = buffer_read(buff, buffer_s16);
-            inst.gun_equipped = buffer_read(buff, buffer_s16);
-            inst.lookdir = buffer_read(buff, buffer_s16);
-        }  
+        scr_recived_packet(buff, sock);
 
         break;
 }
