@@ -8,10 +8,11 @@ if show_question("Host a game?") {
     global.port = port
 
     //global.serverTCP = network_create_server(network_socket_tcp, port, 32);
-
-    var serverUDP = network_create_server(network_socket_udp, port, 32);
+    var serverUDP = network_create_server(network_socket_tcp, port, 2);
 
     global.serverUDP = serverUDP;
+
+    global.iteration = 0;
 
     global.isReady = true;
 
@@ -21,15 +22,18 @@ if show_question("Host a game?") {
     global.hostIp = get_string("Enter the hosts ip: ", "127.0.0.1");
     global.port = get_integer("Enter the port: ", "696969");
     global.name = get_string("Enter your name: ", "Player");
-
-    clientUDP = network_create_socket(network_socket_udp);
+    
+    // clientUDP = network_create_socket_ext(network_socket_udp, global.port);
     // clientTCP = network_create_socket(network_socket_tcp);
+    var clientUDP = network_create_socket(network_socket_tcp);
 
     network_connect_async(clientUDP, global.hostIp, global.port);
     //network_connect(clientTCP, global.hostIp, global.port);
 
     global.clientUDP = clientUDP;
     //global.clientTCP = clientTCP;
+
+    global.iteration = 0;
 
     global.isReady = true;
 

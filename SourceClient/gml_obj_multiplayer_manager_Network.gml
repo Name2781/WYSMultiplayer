@@ -4,18 +4,12 @@ var sock = ds_map_find_value(async_load, "socket");
 
 var ip = ds_map_find_value(async_load, "ip");
 
-show_debug_message("type: " + string(t));
-
 switch(t)
 {
     case network_type_connect:
-        // show_debug_message("Connecting to " + ip);
-
         ds_list_add( global.socketlist, sock );
     
         var inst = instance_create_layer(0,0,"Player",obj_mp_player);
-
-        show_debug_message(object_get_name(inst));
 
         ds_map_add( global.Clients, sock, inst );
 
@@ -28,7 +22,7 @@ switch(t)
         with(inst) { instance_destroy(); }
 
         var index = ds_list_find_index( global.socketlist, sock );
-        ds_list_delete(socketlist,index);
+        ds_list_delete(global.socketlist,index);
 
         break;
 
