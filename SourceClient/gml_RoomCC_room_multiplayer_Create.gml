@@ -7,9 +7,9 @@ if show_question("Host a game?") {
     port = get_integer("Enter the port: ", "696969");
     global.port = port
 
-    var serverUDP = network_create_server(network_socket_tcp, port, 32);
+    var serverTCP = network_create_server(network_socket_tcp, port, 32);
 
-    global.serverUDP = serverUDP;
+    global.serverTCP = serverTCP;
 
     global.iteration = 0;
 
