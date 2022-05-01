@@ -1,3 +1,4 @@
+sId = 0
 gun_equipped = 0
 lookdir = 1
 eye1 = instance_create_layer(x, y, "Player_Eyes", obj_snaili_eye)

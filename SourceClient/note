@@ -1,1 +1,1 @@
-you just need to add a Create file for obj_mp_player and define the variables in the draw function
+all that is needed is to make the server player get synced and make the mp_player draw to work and fix eyes

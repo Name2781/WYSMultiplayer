@@ -6,7 +6,7 @@ if(!variable_global_exists("iteration")) {
     return false;
 }
 
-if (global.iteration < 10) {
+if (global.iteration < 3) {
     global.iteration = global.iteration + 1;
 
     return false;

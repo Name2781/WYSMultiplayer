@@ -7,7 +7,7 @@ if show_question("Host a game?") {
     port = get_integer("Enter the port: ", "696969");
     global.port = port
 
-    var serverTCP = network_create_server(network_socket_tcp, port, 32);
+    serverTCP = network_create_server(network_socket_tcp, port, 32);
 
     global.serverTCP = serverTCP;
 
@@ -22,7 +22,7 @@ if show_question("Host a game?") {
     global.port = get_integer("Enter the port: ", "696969");
     global.name = get_string("Enter your name: ", "Player");
 
-    var clientTCP = network_create_socket(network_socket_tcp);
+    clientTCP = network_create_socket(network_socket_tcp);
 
     network_connect_async(clientTCP, global.hostIp, global.port);
 
