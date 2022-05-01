@@ -18,8 +18,6 @@ switch(msgid)
         inst.x = buffer_read(buffer, buffer_s16);
         inst.y = buffer_read(buffer, buffer_s16);
 
-        // show_debug_message("POS_CMD: " + inst.x + " " + inst.y);
-
         break;
 
     case 1: // INFO_CMD

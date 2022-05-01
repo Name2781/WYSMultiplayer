@@ -9,6 +9,6 @@ buffer_write(buff, buffer_s16, argument2);
 buffer_write(buff, buffer_s16, argument3);
 buffer_write(buff, buffer_s16, argument4);
 
-network_send_packet(global.clientUDP, buff, buffer_get_size(buff));
+network_send_packet(global.clientTCP, buff, buffer_get_size(buff));
 
 buffer_delete(buff);

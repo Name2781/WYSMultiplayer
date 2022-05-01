@@ -13,14 +13,11 @@ if (global.iteration < 10) {
 }
 else {
     global.iteration = 0;
-    // show_debug_message("ran");
 
     if(global.isHost) {
-        // server network logic
+        // TODO: server network logic
 
     } else {
-        // client network logic
-        // show_debug_message("client");
         if (global.state == "inGame" && global.isReady) {
             // TODO: send if the player is jumping and spawn particles
             scr_send_position(obj_player.x, obj_player.y)
