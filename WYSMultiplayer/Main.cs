@@ -39,6 +39,7 @@ namespace WYSMultiplayer
             mp_player_obj.Name = data.Strings.MakeString("obj_mp_player");
 
             mp_player_obj.Sprite = data.Sprites.ByName("spr_player");
+            mp_player_obj.Persistent = true;
 
             // mp_player_obj.EventHandlerFor(EventType.Draw, EventSubtypeDraw.Draw, data.Strings, data.Code, data.CodeLocals)
                 // .AppendGmlSafe(GMLkvp["gml_Object_obj_mp_player_Draw_0"], data);
@@ -52,6 +53,7 @@ namespace WYSMultiplayer
             UndertaleGameObject multiplayermanager_obj = new UndertaleGameObject();
 
             multiplayermanager_obj.Name = data.Strings.MakeString("obj_multiplayer_manager");
+            multiplayermanager_obj.Persistent = true;
 
             multiplayermanager_obj.EventHandlerFor(EventType.Step, EventSubtypeStep.Step, data.Strings, data.Code, data.CodeLocals)
                 .AppendGmlSafe(GMLkvp["gml_obj_multiplayer_manager_Step_0"], data);
