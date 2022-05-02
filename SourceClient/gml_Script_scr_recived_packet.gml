@@ -89,6 +89,12 @@ switch(msgid)
 
         break;
 
+    case 5: // LEVEL_SELECT
+        var level = buffer_read(buffer, buffer_s16);
+
+        scr_fade_to_room(level);
+
+        break;
     default:
         // show_debug_message("Unknown packet");
 

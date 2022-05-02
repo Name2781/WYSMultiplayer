@@ -70,6 +70,8 @@ namespace WYSMultiplayer
 
             CreateScriptFromKVP(data, "scr_player_join", "gml_Script_scr_player_join", 1);
 
+            CreateScriptFromKVP(data, "scr_host_lpick", "gml_Script_scr_host_lpick", 0);
+
             data.CreateCode("gml_RoomCC_room_multiplayer_Create", GMLkvp["gml_RoomCC_room_multiplayer_Create"]);
 
             try
@@ -104,7 +106,7 @@ namespace WYSMultiplayer
             try
             {
                 data.Code.First(code => code.Name.Content == "gml_Object_obj_player_Step_0")
-                    .AppendGML("if keyboard_check_pressed(vk_ralt)\nscr_fade_to_room(room_multiplayer)", data);
+                    .AppendGML("if keyboard_check_pressed(vk_ralt)\nscr_fade_to_room(room_multiplayer)\nif (keyboard_check_pressed(vk_rcontrol) && global.isHost)\nscr_host_lpick();", data);
             }
             catch (Exception) { }
         }

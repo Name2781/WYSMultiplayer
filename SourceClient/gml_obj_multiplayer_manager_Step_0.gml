@@ -6,6 +6,10 @@ if(!variable_global_exists("iteration")) {
     return false;
 }
 
+if(!instance_exists(obj_player)) {
+    return false;
+}
+
 if (global.iteration < 3) {
     global.iteration = global.iteration + 1;
 
