@@ -67,10 +67,6 @@ switch(msgid)
 
         var sId = buffer_read(buffer, buffer_s16);
 
-        show_debug_message(sId)
-
-        // inst.sId = sId;
-
         ds_map_add(global.Clients, sId, inst);
 
         break;
