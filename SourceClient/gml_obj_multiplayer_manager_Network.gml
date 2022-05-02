@@ -6,7 +6,7 @@ var ip = ds_map_find_value(async_load, "ip");
 
 switch(t)
 {
-    case network_type_connect:  
+    case network_type_connect:
         scr_player_join(sock);
 
         ds_list_add( global.socketlist, sock );

@@ -24,7 +24,7 @@ if show_question("Host a game?") {
 
     clientTCP = network_create_socket(network_socket_tcp);
 
-    network_connect_async(clientTCP, global.hostIp, global.port);
+    network_connect(clientTCP, global.hostIp, global.port);
 
     global.clientTCP = clientTCP;
 
