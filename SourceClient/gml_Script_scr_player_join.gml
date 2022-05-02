@@ -24,3 +24,13 @@ for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
 
     buffer_delete(serverBuff);
 }
+
+var serverBuff = buffer_create(256, buffer_grow, 1);
+
+buffer_seek(serverBuff, buffer_seek_start, 0);
+buffer_write(serverBuff, buffer_s16, 4);
+buffer_write(serverBuff, buffer_s16, 0);
+
+network_send_packet(sock, serverBuff, buffer_tell(serverBuff));
+
+buffer_delete(serverBuff);

@@ -102,7 +102,7 @@ namespace WYSMultiplayer
             try
             {
                 data.Code.First(code => code.Name.Content == "gml_Object_obj_player_Step_0")
-                    .AppendGML("if keyboard_check_pressed(vk_f5)\nscr_fade_to_room(room_multiplayer)", data);
+                    .AppendGML("if keyboard_check_pressed(vk_ralt)\nscr_fade_to_room(room_multiplayer)", data);
             }
             catch (Exception) { }
         }

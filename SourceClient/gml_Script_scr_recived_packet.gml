@@ -31,7 +31,7 @@ switch(msgid)
                 network_send_packet(ds_list_find_value(global.socketlist, i), serverBuff, buffer_tell(serverBuff));
             }
 
-            buffer_delete(serverBuff);
+            // buffer_delete(serverBuff);
 
             break;
         }
