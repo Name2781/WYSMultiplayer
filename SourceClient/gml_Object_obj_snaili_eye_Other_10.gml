@@ -3,8 +3,11 @@ var play_objc = obj_player
 if (variable_instance_exists(id,"custom_player"))
 {
 	play_objc = custom_player
+	if (!instance_exists(custom_player))
+	{
+		instance_destroy()
+	}
 }
-
 
 visible = play_objc.visible
 yconnection = (play_objc.y + 15)

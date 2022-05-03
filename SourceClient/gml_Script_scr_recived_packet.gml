@@ -76,15 +76,11 @@ switch(msgid)
 		plr.room_id = room_id_to_set
 		
         break;
-    /*
+    
     case 1: // INFO_CMD
-        inst.hspeed = buffer_read(buffer, buffer_s16);
-        inst.vspeed = buffer_read(buffer, buffer_s16);
-        inst.speed = buffer_read(buffer, buffer_s16);
-        inst.gun_equipped = buffer_read(buffer, buffer_s16);
-        inst.lookdir = buffer_read(buffer, buffer_s16);
+        inst.gun_equipped = buffer_read(buffer, buffer_u8);
 
-        break; */
+        break;
 
     case 2: // PLRJOIN_CMD
         var inst = instance_create_layer(0,0,"Player",obj_mp_player);
