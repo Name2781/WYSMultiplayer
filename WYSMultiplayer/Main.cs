@@ -41,12 +41,19 @@ namespace WYSMultiplayer
             mp_player_obj.Sprite = data.Sprites.ByName("spr_player");
             mp_player_obj.Persistent = true;
 
-            // mp_player_obj.EventHandlerFor(EventType.Draw, EventSubtypeDraw.Draw, data.Strings, data.Code, data.CodeLocals)
-                // .AppendGmlSafe(GMLkvp["gml_Object_obj_mp_player_Draw_0"], data);
-
             mp_player_obj.EventHandlerFor(EventType.Create, data.Strings, data.Code, data.CodeLocals)
                 .AppendGmlSafe(GMLkvp["gml_Object_obj_mp_player_Create"], data);
 
+            mp_player_obj.EventHandlerFor(EventType.Other, EventSubtypeOther.User0, data.Strings, data.Code, data.CodeLocals)
+                .AppendGmlSafe(GMLkvp["gml_Object_obj_mp_player_Other_10"], data);
+
+            data.Code.ByName("gml_Object_obj_snaili_eye_Other_10").ReplaceGmlSafe(GMLkvp["gml_Object_obj_snaili_eye_Other_10"], data);
+
+            mp_player_obj.EventHandlerFor(EventType.Step, EventSubtypeStep.Step, data.Strings, data.Code, data.CodeLocals)
+                .AppendGmlSafe(GMLkvp["gml_Object_obj_mp_player_Step_0"], data);
+
+            mp_player_obj.EventHandlerFor(EventType.Draw, EventSubtypeDraw.Draw, data.Strings, data.Code, data.CodeLocals)
+                .AppendGmlSafe(GMLkvp["gml_Object_obj_mp_player_Draw_0"], data);
 
             data.GameObjects.Add(mp_player_obj);
 
@@ -64,7 +71,7 @@ namespace WYSMultiplayer
 
             CreateScriptFromKVP(data, "scr_send_position", "gml_Script_scr_send_position", 2);
 
-            CreateScriptFromKVP(data, "scr_send_player_info", "gml_Script_scr_send_player_info", 5);
+            CreateScriptFromKVP(data, "scr_send_player_info", "gml_Script_scr_send_player_info", 6);
 
             CreateScriptFromKVP(data, "scr_recived_packet", "gml_Script_scr_recived_packet", 2);
 
