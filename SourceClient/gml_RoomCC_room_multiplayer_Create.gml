@@ -26,17 +26,17 @@ if show_question("Host a game?") {
 
     clientTCP = network_create_socket(network_socket_tcp);
 
-    var buff = buffer_create(256, buffer_grow, 1);
-
-    buffer_seek(buff, buffer_seek_start, 0);
-    buffer_write(buff, buffer_s16, 6);
-    buffer_write(buff, buffer_string, global.name);
-
-    network_send_packet(clientTCP, buff, buffer_tell(buff))
-
-    buffer_delete(buff);
-
     network_connect(clientTCP, global.hostIp, global.port);
+
+    // var buff = buffer_create(256, buffer_grow, 1);
+
+    // buffer_seek(buff, buffer_seek_start, 0);
+    //buffer_write(buff, buffer_s16, 6);
+    // buffer_write(buff, buffer_string, global.name);
+
+    // network_send_packet(clientTCP, buff, buffer_tell(buff))
+
+    // buffer_delete(buff);
 
     global.clientTCP = clientTCP;
 

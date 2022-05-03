@@ -119,7 +119,6 @@ switch(msgid)
         break;
 
     case 6: // PLR_NAME
-        // var sId = buffer_read(buffer, buffer_s16);
         if (global.isHost) { 
             inst.name = buffer_read(buffer, buffer_string);
 
