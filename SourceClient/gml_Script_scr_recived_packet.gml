@@ -128,7 +128,7 @@ switch(msgid)
             buffer_seek(serverBuff, buffer_seek_start, 0);
             buffer_write(serverBuff, buffer_s16, 6);
             buffer_write(serverBuff, buffer_s16, socket);
-            buffer_write(serverBuff, buffer_s32, inst.name);
+            buffer_write(serverBuff, buffer_string, inst.name);
 
             for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
             {
