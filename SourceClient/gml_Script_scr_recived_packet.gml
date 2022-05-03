@@ -105,6 +105,8 @@ switch(msgid)
 
         var sId = buffer_read(buffer, buffer_s16);
 
+        var name = buffer_read(buffer, buffer_string);
+
         ds_map_add(global.Clients, sId, inst);
 
         break;
