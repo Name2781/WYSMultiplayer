@@ -17,11 +17,11 @@ switch(msgid)
         if (global.isHost) { 
             inst.x = buffer_read(buffer, buffer_s32);
             inst.y = buffer_read(buffer, buffer_s32);
-			inst.hspeed = buffer_read(buffer, buffer_f32);
-			inst.vspeed = buffer_read(buffer, buffer_f32);
-			inst.inputxy = buffer_read(buffer, buffer_f32);
-			inst.input_jump = buffer_read(buffer, buffer_u8);
-			inst.room_id = buffer_read(buffer, buffer_u16)
+	    	inst.hspeed = buffer_read(buffer, buffer_f32);
+	    	inst.vspeed = buffer_read(buffer, buffer_f32);
+	    	inst.inputxy = buffer_read(buffer, buffer_f32);
+	    	inst.input_jump = buffer_read(buffer, buffer_u8);
+	    	inst.room_id = buffer_read(buffer, buffer_u16)
 
             var serverBuff = buffer_create(256, buffer_grow, 1);
 
@@ -29,11 +29,11 @@ switch(msgid)
             buffer_write(serverBuff, buffer_s16, 0);
             buffer_write(serverBuff, buffer_s32, inst.x);
             buffer_write(serverBuff, buffer_s32, inst.y);
-			buffer_write(serverBuff, buffer_f32, inst.hspeed);
-            buffer_write(serverBuff, buffer_f32, inst.vspeed);
-			buffer_write(serverBuff, buffer_f32, inst.inputxy); //input
-			buffer_write(serverBuff, buffer_u8, inst.input_jump); //jumppressthing
-			buffer_write(serverBuff, buffer_u16, inst.room_id); //room_id
+	   	 	buffer_write(serverBuff, buffer_f32, inst.hspeed);
+        	buffer_write(serverBuff, buffer_f32, inst.vspeed);
+	    	buffer_write(serverBuff, buffer_f32, inst.inputxy); //input
+	    	buffer_write(serverBuff, buffer_u8, inst.input_jump); //jumppressthing
+	    	buffer_write(serverBuff, buffer_u16, inst.room_id); //room_id
             buffer_write(serverBuff, buffer_s16, socket);
 
             for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
@@ -41,7 +41,7 @@ switch(msgid)
                 network_send_packet(ds_list_find_value(global.socketlist, i), serverBuff, buffer_tell(serverBuff));
             }
 
-            buffer_delete(serverBuff);
+            // buffer_delete(serverBuff);
 
             break;
         }
