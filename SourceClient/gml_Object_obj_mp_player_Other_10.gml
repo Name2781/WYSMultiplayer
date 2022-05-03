@@ -1,0 +1,12 @@
+col_snail_body = obj_levelstyler.col_snail_body
+col_snail_outline = obj_levelstyler.col_snail_outline
+col_snail_shell = obj_levelstyler.col_snail_shell
+col_snail_eye = obj_levelstyler.col_snail_eye
+eye1.col_snail_outline = col_snail_outline
+eye1.col_snail_body = col_snail_body
+eye1.col_snail_shell = col_snail_shell
+eye1.col_snail_eye = col_snail_eye
+eye2.col_snail_outline = col_snail_outline
+eye2.col_snail_body = col_snail_body
+eye2.col_snail_shell = col_snail_shell
+eye2.col_snail_eye = col_snail_eye
