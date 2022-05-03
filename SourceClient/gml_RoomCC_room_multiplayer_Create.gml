@@ -22,7 +22,7 @@ if show_question("Host a game?") {
     global.isHost = false;
     global.hostIp = get_string("Enter the hosts ip: ", "127.0.0.1");
     global.port = get_integer("Enter the port: ", "696969");
-    // global.name = get_string("Enter your name: ", "Player");
+    global.name = get_string("Enter your name: ", "Player");
 
     clientTCP = network_create_socket(network_socket_tcp);
 
