@@ -15,3 +15,5 @@ draw_sprite_ext(house_sprite, 0, (x - (15 * lookdir)), (y + 16), (house_width * 
 draw_sprite_ext(house_sprite, 1, (x - (15 * lookdir)), (y + 16), (house_width * lookdir), house_height, house_tilt, col_snail_outline, 1)
 draw_sprite_ext(spr_player_base, 0, x, y, (image_xscale * lookdir), image_yscale, image_angle, col_snail_body, 1)
 draw_sprite_ext(spr_player_base, 1, x, y, (image_xscale * lookdir), image_yscale, image_angle, col_snail_outline, 1)
+
+// draw_text_transformed(x - (string_width(name) / 4), y - 40, name, 0.5, 0.5, 0)

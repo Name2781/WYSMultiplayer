@@ -4,8 +4,10 @@ global.state = "waiting";
 if show_question("Host a game?") {
     global.isHost = true;
 
-    port = get_integer("Enter the port: ", "696969");
+    port = get_integer("Enter the port: ", "25565");
     global.port = port
+
+    global.name = get_string("Enter your name: ", "Player");
 
     serverTCP = network_create_server(network_socket_tcp, port, 32);
 
@@ -23,6 +25,16 @@ if show_question("Host a game?") {
     global.name = get_string("Enter your name: ", "Player");
 
     clientTCP = network_create_socket(network_socket_tcp);
+
+    var buff = buffer_create(256, buffer_grow, 1);
+
+    buffer_seek(buff, buffer_seek_start, 0);
+    buffer_write(buff, buffer_s16, 6);
+    buffer_write(buff, buffer_s32, global.name);
+
+    network_send_packet(clientTCP, buff, buffer_tell(buff))
+
+    buffer_delete(buff);
 
     network_connect(clientTCP, global.hostIp, global.port);
 

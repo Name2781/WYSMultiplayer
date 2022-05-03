@@ -19,6 +19,7 @@ col_snail_shell = 0
 col_snail_eye = 0
 inputxy = 0
 input_jump = 0
+name = ""
 if instance_exists(obj_levelstyler)
 {
     if variable_instance_exists(obj_levelstyler.id, "col_snail_body")

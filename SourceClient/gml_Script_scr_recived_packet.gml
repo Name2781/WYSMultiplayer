@@ -60,8 +60,8 @@ switch(msgid)
 
         plr = ds_map_find_value(global.Clients, socketId);
 
-        if (is_undefined(plr)) {
-            return false;
+        if (is_undefined(plr) || !instance_exists(plr)) {
+            break;
         }
 
         plr.x = nX;
@@ -73,7 +73,7 @@ switch(msgid)
 		plr.inputxy = nIXY;
 		plr.input_jump = nJ;
 		
-		plr.room_id = room_id_to_set
+		plr.room_id = room_id_to_set;
 		
         break;
     
@@ -115,6 +115,40 @@ switch(msgid)
         scr_fade_to_room(level);
 
         break;
+
+    case 6: // PLR_NAME
+        // var sId = buffer_read(buffer, buffer_s16);
+        if (global.isHost) 
+            inst.name = buffer_read(buffer, buffer_string);
+
+            var serverBuff = buffer_create(256, buffer_grow, 1);
+
+            buffer_seek(serverBuff, buffer_seek_start, 0);
+            buffer_write(serverBuff, buffer_s16, 6);
+            buffer_write(serverBuff, buffer_s16, socket);
+            buffer_write(serverBuff, buffer_s32, inst.name);
+
+            for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
+            {
+                network_send_packet(ds_list_find_value(global.socketlist, i), serverBuff, buffer_tell(serverBuff));
+            }
+
+            break;
+        }
+
+        var sId = buffer_read(buffer, buffer_s16);
+        var plr = ds_map_find_value(global.Clients, sId);
+
+        if (is_undefined(plr) || !instance_exists(plr)) {
+            break;
+        }
+
+        var plrName = buffer_read(buffer, buffer_string);
+
+        plr.name = plrName;
+
+        break;
+
     default:
         // show_debug_message("Unknown packet");
 
