@@ -120,7 +120,7 @@ switch(msgid)
 
     case 6: // PLR_NAME
         // var sId = buffer_read(buffer, buffer_s16);
-        if (global.isHost) 
+        if (global.isHost) { 
             inst.name = buffer_read(buffer, buffer_string);
 
             var serverBuff = buffer_create(256, buffer_grow, 1);
