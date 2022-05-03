@@ -69,9 +69,9 @@ namespace WYSMultiplayer
 
             data.GameObjects.Add(multiplayermanager_obj);
 
-            CreateScriptFromKVP(data, "scr_send_position", "gml_Script_scr_send_position", 2);
+            CreateScriptFromKVP(data, "scr_send_position", "gml_Script_scr_send_position", 6);
 
-            CreateScriptFromKVP(data, "scr_send_player_info", "gml_Script_scr_send_player_info", 6);
+            CreateScriptFromKVP(data, "scr_send_player_info", "gml_Script_scr_send_player_info", 5);
 
             CreateScriptFromKVP(data, "scr_recived_packet", "gml_Script_scr_recived_packet", 2);
 
