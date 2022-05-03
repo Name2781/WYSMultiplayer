@@ -30,7 +30,7 @@ if show_question("Host a game?") {
 
     buffer_seek(buff, buffer_seek_start, 0);
     buffer_write(buff, buffer_s16, 6);
-    buffer_write(buff, buffer_s32, global.name);
+    buffer_write(buff, buffer_string, global.name);
 
     network_send_packet(clientTCP, buff, buffer_tell(buff))
 
