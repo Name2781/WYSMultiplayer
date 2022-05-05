@@ -14,6 +14,8 @@ if (global.isHost) {
 switch(msgid)
 {
     case 0: // POS_CMD
+        show_debug_message("POS_CMD");
+
         if (global.isHost) { 
             inst.x = buffer_read(buffer, buffer_s32);
             inst.y = buffer_read(buffer, buffer_s32);
@@ -78,11 +80,12 @@ switch(msgid)
         break;
     
     case 1: // INFO_CMD
-        inst.gun_equipped = buffer_read(buffer, buffer_u8);
+        // inst.gun_equipped = buffer_read(buffer, buffer_u8);
 
         break;
 
     case 2: // PLRJOIN_CMD
+        show_debug_message("PLRJOIN_CMD");
         var inst = instance_create_layer(0,0,"Player",obj_mp_player);
 
         var sId = buffer_read(buffer, buffer_s16);
@@ -101,11 +104,12 @@ switch(msgid)
         break; */
 
     case 4: // NEWPLR_DATA
+        show_debug_message("NEWPLR_DATA");
         var inst = instance_create_layer(0,0,"Player",obj_mp_player);
 
         var sId = buffer_read(buffer, buffer_s16);
 
-        // var name = buffer_read(buffer, buffer_string);
+        inst.name = buffer_read(buffer, buffer_string);
 
         ds_map_add(global.Clients, sId, inst);
 
@@ -119,6 +123,7 @@ switch(msgid)
         break;
 
     case 6: // PLR_NAME
+        show_debug_message("PLR_NAME");
         if (global.isHost) { 
             inst.name = buffer_read(buffer, buffer_string);
 

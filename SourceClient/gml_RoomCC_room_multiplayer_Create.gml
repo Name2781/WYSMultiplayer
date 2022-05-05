@@ -21,22 +21,22 @@ if show_question("Host a game?") {
 } else {
     global.isHost = false;
     global.hostIp = get_string("Enter the hosts ip: ", "127.0.0.1");
-    global.port = get_integer("Enter the port: ", "696969");
+    global.port = get_integer("Enter the port: ", "25565");
     global.name = get_string("Enter your name: ", "Player");
 
     clientTCP = network_create_socket(network_socket_tcp);
 
     network_connect(clientTCP, global.hostIp, global.port);
 
-    // var buff = buffer_create(256, buffer_grow, 1);
+    var cBuff = buffer_create(256, buffer_grow, 1);
 
-    // buffer_seek(buff, buffer_seek_start, 0);
-    //buffer_write(buff, buffer_s16, 6);
-    // buffer_write(buff, buffer_string, global.name);
+    buffer_seek(cBuff, buffer_seek_start, 0);
+    buffer_write(cBuff, buffer_s16, 6);
+    buffer_write(cBuff, buffer_string, global.name);
 
-    // network_send_packet(clientTCP, buff, buffer_tell(buff))
+    network_send_packet(clientTCP, cBuff, buffer_tell(cBuff))
 
-    // buffer_delete(buff);
+    buffer_delete(cBuff);
 
     global.clientTCP = clientTCP;
 
