@@ -91,14 +91,16 @@ switch(msgid)
 
         break;
 
-    /* case 3: // PLRLEAVE_CMD
+    case 3: // PLRLEAVE_CMD
         var sId = buffer_read(buffer, buffer_s16);
 
-        show_debug_message(sId)
+        plr = ds_map_find_value(global.Clients, sId);
 
-        ds_map_remove(global.Clients, sId);
+        with(plr) { instance_destroy(); }
 
-        break; */
+        ds_map_delete(global.Clients, sId);
+
+        break;
 
     case 4: // NEWPLR_DATA
         var inst = instance_create_layer(0,0,"Player",obj_mp_player);

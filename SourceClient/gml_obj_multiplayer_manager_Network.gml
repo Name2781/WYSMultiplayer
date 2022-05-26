@@ -26,6 +26,19 @@ switch(t)
         var index = ds_list_find_index( global.socketlist, sock );
         ds_list_delete(global.socketlist,index);
 
+        var serverBuff = buffer_create(256, buffer_grow, 1);
+
+        buffer_seek(serverBuff, buffer_seek_start, 0);
+        buffer_write(serverBuff, buffer_s16, 3);
+        buffer_write(serverBuff, buffer_s16, sock);
+
+        for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
+        {
+            network_send_packet(ds_list_find_value(global.socketlist, i), serverBuff, buffer_tell(serverBuff));
+        }
+
+        buffer_delete(serverBuff);
+
         break;
 
     case network_type_data:
