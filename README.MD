@@ -53,4 +53,4 @@ The mod syncs player positions and hides and shows players based on what levels 
 
 If you find a bug please make a issue on this github with what you were doing whne the bug happened and a screenshot of the error message and I will try to fix it.
 
-This mod has had no or very minimal development in the past few months and has been done for a few months but I didn't release it though for a few reasons anyways its released now.
+Also mod has had no or very minimal development in the past few months and has been done for a few months but I didn't release it though for a few reasons anyways its released now.
