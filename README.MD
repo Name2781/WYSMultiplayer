@@ -39,6 +39,14 @@ There are 2 ways to install this mod you can use [GMML](https://github.com/cgytr
 ### Keybinds 
 
     The keybinds for the mod are f5 to start or join a game and f6 if you are the host to send all the players to the level select.
+    
+### Hosting
+
+To host a game you need to press f5 and pick a name and a port and port forward the port that you picked for the server on your router (by default 25565)
+
+### Joining 
+
+Press f5 pick a name enter the hosts ip and the port they picked and if everything was set up right then you should be able to see then inside the waiting room
 
 ## Features
 
