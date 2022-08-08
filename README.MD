@@ -8,7 +8,7 @@ This is a mod that adds online multiplayer to the game Will you snail.
 There are 2 ways to install this mod you can use [GMML](https://github.com/cgytrus/gmml) or [FLIPS](https://dl.smwcentral.net/11474/floating.zip)
 
 ### Flips
-    Make sure you have downloaded and unzipped the wysmpFLIPS.zip from the releases!
+    Make sure you have downloaded and unzipped the wysmpFLIPS.zip from the [releases](https://github.com/Name2781/WYSMultiplayer)! 
 
     1. Have Will You Snail on steam.
     2. Rightclick Will You Snail on the left sidebar of your steam library.
@@ -25,7 +25,7 @@ There are 2 ways to install this mod you can use [GMML](https://github.com/cgytr
 
 ### GMML
 
-    1. Download and unzip wysmpGMML.zip
+    1. Download and unzip wysmpGMML.zip from the [releases](https://github.com/Name2781/WYSMultiplayer)! 
     2. install gmml either from the github actions or compile it with the guide on gmmls repo
     3. open your local game files and copy the mods foldder from the zip to the gmml/mods folder that you installed with gmml
     4. open you game and it should work
