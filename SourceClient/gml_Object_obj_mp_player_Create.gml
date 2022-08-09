@@ -13,6 +13,7 @@ house_width = 1
 house_tilt = 0
 lockmovement = 40
 room_id = room
+isSpectator = false
 col_snail_outline = 0
 col_snail_body = 0
 col_snail_shell = 0

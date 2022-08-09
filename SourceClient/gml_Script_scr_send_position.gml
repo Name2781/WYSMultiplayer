@@ -10,6 +10,7 @@ buffer_write(buff, buffer_f32, argument3); //vspeed
 buffer_write(buff, buffer_f32, argument4); //inputxy
 buffer_write(buff, buffer_u8, argument5); //inputjump
 buffer_write(buff, buffer_u16, argument6); //room
+// buffer_write(buff, buffer_bool, argument7); // isSpectator
 //dont send jump press cuz the client already handles that speed change.
 
 network_send_packet(global.clientTCP, buff, buffer_get_size(buff));

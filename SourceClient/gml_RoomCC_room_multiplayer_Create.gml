@@ -9,6 +9,8 @@ if show_question("Host a game?") {
 
     global.name = get_string("Enter your name: ", "Player");
 
+    global.isSpectator = show_question("Spectate?");
+
     serverTCP = network_create_server(network_socket_tcp, port, 32);
 
     global.serverTCP = serverTCP;
@@ -23,6 +25,10 @@ if show_question("Host a game?") {
     global.hostIp = get_string("Enter the hosts ip: ", "127.0.0.1");
     global.port = get_integer("Enter the port: ", "25565");
     global.name = get_string("Enter your name: ", "Player");
+    global.isSpectator = show_question("Spectate?");
+
+    if (global.isSpectator)
+        obj_player.visible = false;
 
     clientTCP = network_create_socket(network_socket_tcp);
 

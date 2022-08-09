@@ -21,7 +21,8 @@ switch(msgid)
 	    	inst.vspeed = buffer_read(buffer, buffer_f32);
 	    	inst.inputxy = buffer_read(buffer, buffer_f32);
 	    	inst.input_jump = buffer_read(buffer, buffer_u8);
-	    	inst.room_id = buffer_read(buffer, buffer_u16)
+	    	inst.room_id = buffer_read(buffer, buffer_u16);
+            // inst.isSpectator = buffer_read(buffer, buffer_bool);
 
             var serverBuff = buffer_create(256, buffer_grow, 1);
 
@@ -34,6 +35,7 @@ switch(msgid)
 	    	buffer_write(serverBuff, buffer_f32, inst.inputxy); //input
 	    	buffer_write(serverBuff, buffer_u8, inst.input_jump); //jumppressthing
 	    	buffer_write(serverBuff, buffer_u16, inst.room_id); //room_id
+            // buffer_write(serverBuff, buffer_bool, inst.isSpectator);
             buffer_write(serverBuff, buffer_s16, socket);
 
             for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
@@ -54,6 +56,9 @@ switch(msgid)
 		var nIXY = buffer_read(buffer, buffer_f32);
 		var nJ = buffer_read(buffer, buffer_u8);
 		var room_id_to_set = buffer_read(buffer, buffer_u16);
+        // var isSpectator = buffer_read(buffer, buffer_bool);
+        // var hat_id = buffer_read(buffer, buffer_u16);
+        
         var socketId = buffer_read(buffer, buffer_s16);
 
         // show_debug_message(socketId)
@@ -63,6 +68,15 @@ switch(msgid)
         if (is_undefined(plr) || !instance_exists(plr)) {
             break;
         }
+
+        /*if (!isSpectator)
+        {
+            plr.x = nX;
+            plr.y = nY;
+        } else {
+            plr.x = 9999;
+            plr.y = 9999;
+        } */
 
         plr.x = nX;
         plr.y = nY;
@@ -108,6 +122,7 @@ switch(msgid)
         var sId = buffer_read(buffer, buffer_s16);
 
         inst.name = buffer_read(buffer, buffer_string);
+        // inst.isSpectator = buffer_read(buffer, buffer_u8);
 
         ds_map_add(global.Clients, sId, inst);
 

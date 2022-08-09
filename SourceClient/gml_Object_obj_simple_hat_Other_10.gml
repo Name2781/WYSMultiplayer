@@ -11,9 +11,6 @@ if (variable_instance_exists(id,"custom_player"))
 
 visible = play_objc.visible
 
-
-
-
 if victory
 {
     if (play_objc.x < 60)
