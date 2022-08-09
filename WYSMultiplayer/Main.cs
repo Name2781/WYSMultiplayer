@@ -112,6 +112,14 @@ namespace WYSMultiplayer
 
             data.Rooms.Add(mp_room);
 
+            // Conviences.PrependCode
+
+            UndertaleCode code = data.Code.First(c => c.Name.Content == "gml_Object_obj_snaili_eye_Draw_0");
+            if (code != null)
+            {
+                Conviences.PrependCode("gml_Object_obj_snaili_eye_Draw_0", "if (!variable_instance_exists(id, \"dir\"))\nreturn false; ", data);
+            }
+
             try
             { // vk_ralt, vk_rcontrol
                 data.Code.First(code => code.Name.Content == "gml_Object_obj_player_Step_0")

@@ -1,4 +1,4 @@
-if !variable_instance_exists(id, "dir")
+if (!variable_instance_exists(id, "dir"))
     return false;
 
 draw_sprite_ext(spr_snail_eye_connection, 0, xconnection, yconnection, (dist / 11), 1, dir, col_snail_body, 1)

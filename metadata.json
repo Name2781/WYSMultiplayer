@@ -1,7 +1,7 @@
 {
     "id": "me.name.wysmultiplayer",
     "name": "Will You Snail Multiplayer",
-    "version": "0.1.0",
+    "version": "1.0.1",
     "authors": [ "Name" ],
     "description": "Online multiplayer for Will You Snail",
     "dependencies": [
