@@ -1,5 +1,6 @@
 global.isReady = false;
 global.state = "waiting";
+global.spectating = 0;
 
 if show_question("Host a game?") {
     global.isHost = true;

@@ -22,7 +22,7 @@ switch(msgid)
 	    	inst.inputxy = buffer_read(buffer, buffer_f32);
 	    	inst.input_jump = buffer_read(buffer, buffer_u8);
 	    	inst.room_id = buffer_read(buffer, buffer_u16);
-            // inst.isSpectator = buffer_read(buffer, buffer_bool);
+            inst.isSpectator = buffer_read(buffer, buffer_bool);
 
             var serverBuff = buffer_create(256, buffer_grow, 1);
 
@@ -35,7 +35,7 @@ switch(msgid)
 	    	buffer_write(serverBuff, buffer_f32, inst.inputxy); //input
 	    	buffer_write(serverBuff, buffer_u8, inst.input_jump); //jumppressthing
 	    	buffer_write(serverBuff, buffer_u16, inst.room_id); //room_id
-            // buffer_write(serverBuff, buffer_bool, inst.isSpectator);
+            buffer_write(serverBuff, buffer_bool, inst.isSpectator);
             buffer_write(serverBuff, buffer_s16, socket);
 
             for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
@@ -56,7 +56,7 @@ switch(msgid)
 		var nIXY = buffer_read(buffer, buffer_f32);
 		var nJ = buffer_read(buffer, buffer_u8);
 		var room_id_to_set = buffer_read(buffer, buffer_u16);
-        // var isSpectator = buffer_read(buffer, buffer_bool);
+        var isSpectator = buffer_read(buffer, buffer_bool);
         // var hat_id = buffer_read(buffer, buffer_u16);
         
         var socketId = buffer_read(buffer, buffer_s16);
@@ -69,17 +69,17 @@ switch(msgid)
             break;
         }
 
-        /*if (!isSpectator)
+        if (!isSpectator)
         {
             plr.x = nX;
             plr.y = nY;
         } else {
             plr.x = 9999;
             plr.y = 9999;
-        } */
+        }
 
-        plr.x = nX;
-        plr.y = nY;
+        // plr.x = nX;
+        // plr.y = nY;
 		
 		plr.hspeed = nH;
         plr.vspeed = nV;
