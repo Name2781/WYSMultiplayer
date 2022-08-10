@@ -18,14 +18,11 @@ if(!variable_global_exists("isSpectator")) {
 
 if (global.isSpectator && variable_global_exists("spectating")) {
     if keyboard_check_pressed(vk_ralt) {
-        // ds_map_size
         global.spectating = global.spectating + 1;
 
         if (global.spectating > ds_map_size(global.Clients)) {
             global.spectating = 0;
         }
-
-        // make this loop if you go past the max and test that spectating works
     }
 
     if keyboard_check_pressed(vk_lalt) {
@@ -46,7 +43,6 @@ else {
     global.iteration = 0;
 
     if(global.isHost && global.isReady) {
-        // TODO: server network logic
         var serverBuff = buffer_create(256, buffer_grow, 1);
 
         buffer_seek(serverBuff, buffer_seek_start, 0);
@@ -59,7 +55,6 @@ else {
 		buffer_write(serverBuff, buffer_u8, global.input_jump); //inputjump
 		buffer_write(serverBuff, buffer_u16, room); //room
         buffer_write(serverBuff, buffer_bool, global.isSpectator); // isSpectator
-        // buffer_write(serverBuff, buffer_u16, global.save_equipped_hat); //hat
 		
         buffer_write(serverBuff, buffer_s16, 0);
 
@@ -69,6 +64,19 @@ else {
         }
 
         buffer_delete(serverBuff);
+
+        var diffBuff = buffer_create(256, buffer_grow, 1);
+		
+        buffer_seek(diffBuff, buffer_seek_start, 0);
+        buffer_write(diffBuff, buffer_s16, 1); // INFO_CMD
+        buffer_write(diffBuff, buffer_u16, global.save_difficulty); // difficulty
+
+        for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
+        {
+            network_send_packet(ds_list_find_value(global.socketlist, i), diffBuff, buffer_tell(diffBuff));
+        }
+
+        buffer_delete(diffBuff);
 
         if (global.isSpectator) {
             obj_player.visible = false;
@@ -95,8 +103,8 @@ else {
         }
     } else {
         if (global.state == "inGame" && global.isReady) {
-            // TODO: send if the player is jumping and spawn particles*
-            scr_send_position(obj_player.x, obj_player.y, obj_player.hspeed, obj_player.vspeed, global.input_x, global.input_jump, room/*, global.save_equipped_hat*/, global.isSpectator);
+            // TODO: send if the player is jumping and spawn particles
+            scr_send_position(obj_player.x, obj_player.y, obj_player.hspeed, obj_player.vspeed, global.input_x, global.input_jump, room, global.isSpectator);
 
             if (global.isSpectator) {
                 obj_player.visible = false;
@@ -120,7 +128,6 @@ else {
                 obj_player.x = plr.x;
                 obj_player.y = plr.y;
             }
-            // scr_send_player_info(obj_player.hspeed, obj_player.vspeed, obj_player.speed, obj_player.gun_equipped, obj_player.lookdir)
         }
     }
 }

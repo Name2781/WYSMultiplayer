@@ -98,6 +98,8 @@ namespace WYSMultiplayer
 
             mp_room.AddObjectToLayer(data, "obj_player", "Player");
 
+            mp_room.AddObjectToLayer(data, "obj_dontRestartLevelOnDifficultyChange", "FadeOutIn");
+
             mp_room.AddObjectToLayer(data, "obj_post_processing_draw", "PostProcessing");
 
             var bottomWall = mp_room.AddObjectToLayer(data, "obj_wall", "Walls");
@@ -123,7 +125,7 @@ namespace WYSMultiplayer
             try
             { // vk_ralt, vk_rcontrol
                 data.Code.First(code => code.Name.Content == "gml_Object_obj_player_Step_0")
-                    .AppendGML("if keyboard_check_pressed(vk_f5)\nscr_fade_to_room(room_multiplayer)\nif(!variable_global_exists(\"iteration\"))\nreturn false\nif (keyboard_check_pressed(vk_f6) && global.isHost)\nscr_host_lpick();", data);
+                    .AppendGML("if (keyboard_check_pressed(vk_f6) && global.isHost)\nscr_host_lpick();\nif(variable_global_exists(\"isHost\"))\nreturn false\nif keyboard_check_pressed(vk_f5)\nscr_fade_to_room(room_multiplayer)\nif(!variable_global_exists(\"iteration\"))\nreturn false", data);
             } // vk_f5, vk_f6
             catch (Exception) { }
         }
