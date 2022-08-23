@@ -2,6 +2,7 @@ global.isReady = false;
 global.state = "waiting";
 global.spectating = 0;
 global.oldDifficulty = 0;
+global.oldHatId = 0;
 
 if(variable_global_exists("isHost"))
     return false;
