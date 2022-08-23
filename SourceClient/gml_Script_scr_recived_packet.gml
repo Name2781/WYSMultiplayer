@@ -253,6 +253,149 @@ switch(msgid)
         
         break;
 
+    case 8: // HAT
+        var created_hat = undefined;
+
+        if (global.isHost) { 
+            var hatId = buffer_read(buffer, buffer_s8)
+
+            with (obj_hat_parent)
+            {
+                if (!is_undefined(custom_player) && custom_player == inst)
+                {
+                    if (!dead)
+                    {
+                        dead = 1
+                        powery = (13 + random(6))
+                        angle = ((global.temporary_stuff - 40) + random(80))
+                        xspeed = (random(6) - 3)
+                        yspeed = -5
+                    }
+                }
+            }
+
+            // I love how gamemaker fails to detect that i just want to make a variable like i get it but its also kinda annoying and sometimes creates very stupid bugs
+            switch hatId
+            {
+                case 0:
+                    created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                    created_hat.sprite_index = spr_hat_cylinder
+                    break
+                case 1:
+                    created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                    created_hat.sprite_index = spr_hat_shelly
+                    break
+                case 3:
+                    created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat_rider)
+                    created_hat.sprite_index = spr_hat_human
+                    break
+                case 2:
+                    created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                    created_hat.sprite_index = spr_hat_unicorn
+                    created_hat.glued_to_hat = 1
+                    break
+                case 4:
+                    created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                    created_hat.sprite_index = spr_hat_winter
+                    break
+                case 5:
+                    created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                    created_hat.sprite_index = spr_hat_squid
+                    created_hat.glued_to_hat = 1
+                    break
+                case 6:
+                    created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                    created_hat.sprite_index = spr_hat_poopoo
+                    break
+            }
+
+            if (is_undefined(created_hat))
+                break
+
+            created_hat.custom_player = inst
+
+            var buff = buffer_create(256, buffer_grow, 1);
+
+            buffer_seek(buff, buffer_seek_start, 0);
+
+            buffer_write(buff, buffer_s16, 8);
+            buffer_write(buff, buffer_s8, hatId);
+            buffer_write(buff, buffer_s16, socket);
+
+            for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
+            {
+                if (ds_list_find_value(global.socketlist, i) == socket) {
+                    continue;
+                }
+                
+                network_send_packet(ds_list_find_value(global.socketlist, i), buff, buffer_tell(buff));
+            }
+        } else {
+            var hatId = buffer_read(buffer, buffer_s8)
+
+            switch hatId
+            {
+                case 0:
+                    var created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                    created_hat.sprite_index = spr_hat_cylinder
+                    break
+                case 1:
+                    var created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                    created_hat.sprite_index = spr_hat_shelly
+                    break
+                case 3:
+                    var created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat_rider)
+                    created_hat.sprite_index = spr_hat_human
+                    break
+                case 2:
+                    var created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                    created_hat.sprite_index = spr_hat_unicorn
+                    created_hat.glued_to_hat = 1
+                    break
+                case 4:
+                    var created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                    created_hat.sprite_index = spr_hat_winter
+                    break
+                case 5:
+                    var created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                    created_hat.sprite_index = spr_hat_squid
+                    created_hat.glued_to_hat = 1
+                    break
+                case 6:
+                    var created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                    created_hat.sprite_index = spr_hat_poopoo
+                    break
+            }
+
+            if (is_undefined(created_hat))
+                break
+
+            var socketId = buffer_read(buffer, buffer_s16);
+
+            plr = ds_map_find_value(global.Clients, socketId);
+
+            if (is_undefined(plr) || !instance_exists(plr)) {
+                break;
+            }
+
+            with (obj_hat_parent)
+            {
+                if (!is_undefined(custom_player) && custom_player == plr)
+                {
+                    if (!dead)
+                    {
+                        dead = 1
+                        powery = (13 + random(6))
+                        angle = ((global.temporary_stuff - 40) + random(80))
+                        xspeed = (random(6) - 3)
+                        yspeed = -5
+                    }
+                }
+            }
+
+            created_hat.custom_player = plr
+        }
+
     default:
         // show_debug_message("Unknown packet");
 

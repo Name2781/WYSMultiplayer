@@ -78,6 +78,26 @@ else {
 
         buffer_delete(diffBuff);
 
+        if (global.oldHatId != global.save_equipped_hat) {
+            var buff = buffer_create(256, buffer_grow, 1);
+
+            buffer_seek(buff, buffer_seek_start, 0);
+
+            buffer_write(buff, buffer_s16, 8);
+            buffer_write(buff, buffer_s8, global.save_equipped_hat);
+            buffer_write(buff, buffer_s16, 0);
+
+
+            global.oldHatId = global.save_equipped_hat;
+
+            for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
+            {
+                network_send_packet(ds_list_find_value(global.socketlist, i), buff, buffer_tell(buff));
+            }
+
+            buffer_delete(buff);
+        }
+
         if (global.isSpectator) {
             obj_player.visible = false;
 
@@ -105,6 +125,21 @@ else {
         if (global.state == "inGame" && global.isReady) {
             // TODO: send if the player is jumping and spawn particles
             scr_send_position(obj_player.x, obj_player.y, obj_player.hspeed, obj_player.vspeed, global.input_x, global.input_jump, room, global.isSpectator);
+
+            if (global.oldHatId != global.save_equipped_hat) {
+                var buff = buffer_create(256, buffer_grow, 1);
+
+                buffer_seek(buff, buffer_seek_start, 0);
+
+                buffer_write(buff, buffer_s16, 8);
+                buffer_write(buff, buffer_s8, global.save_equipped_hat);
+
+                network_send_packet(global.clientTCP, buff, buffer_get_size(buff));
+
+                buffer_delete(buff);
+
+                global.oldHatId = global.save_equipped_hat;
+            }
 
             if (global.isSpectator) {
                 obj_player.visible = false;

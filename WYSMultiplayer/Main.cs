@@ -49,6 +49,8 @@ namespace WYSMultiplayer
 
             data.Code.ByName("gml_Object_obj_snaili_eye_Other_10").ReplaceGmlSafe(GMLkvp["gml_Object_obj_snaili_eye_Other_10"], data);
             data.Code.ByName("gml_Object_obj_ball_Step_1").ReplaceGmlSafe(GMLkvp["gml_Object_obj_ball_Step_1"], data);
+            data.Code.ByName("gml_Object_obj_simple_hat_Other_10").ReplaceGmlSafe(GMLkvp["gml_Object_obj_simple_hat_Other_10"], data);
+            data.Code.ByName("gml_GlobalScript_scr_spawn_correct_hat").ReplaceGmlSafe(GMLkvp["gml_GlobalScript_scr_spawn_correct_hat"], data);
 
             mp_player_obj.EventHandlerFor(EventType.Step, EventSubtypeStep.Step, data.Strings, data.Code, data.CodeLocals)
                 .AppendGmlSafe(GMLkvp["gml_Object_obj_mp_player_Step_0"], data);
@@ -126,9 +128,10 @@ namespace WYSMultiplayer
             try
             { // vk_ralt, vk_rcontrol
                 data.Code.First(code => code.Name.Content == "gml_Object_obj_player_Step_0")
-                    .AppendGML("if (keyboard_check_pressed(vk_f6) && global.isHost)\nscr_host_lpick();\nif(variable_global_exists(\"isHost\"))\nreturn false\nif keyboard_check_pressed(vk_f5)\nscr_fade_to_room(room_multiplayer)\nif(!variable_global_exists(\"iteration\"))\nreturn false", data);
+                    .AppendGML("if (keyboard_check_pressed(vk_f5) && !variable_global_exists('isHost'))\nscr_fade_to_room(room_multiplayer)\nif (keyboard_check_pressed(vk_f6) && variable_global_exists('isHost') && global.isHost)\nscr_host_lpick();", data);
             } // vk_f5, vk_f6
             catch (Exception) { }
         }
     }
+    
 }

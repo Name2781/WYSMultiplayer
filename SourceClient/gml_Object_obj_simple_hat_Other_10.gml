@@ -3,10 +3,13 @@ var play_objc = play_objc
 if (variable_instance_exists(id,"custom_player"))
 {
 	play_objc = custom_player
-	if (!instance_exists(custom_player))
-	{
-		instance_destroy()
-	}
+    
+    if (!instance_exists(custom_player))
+    {
+        instance_destroy()
+    }
+} else {
+    play_objc = obj_player
 }
 
 visible = play_objc.visible
