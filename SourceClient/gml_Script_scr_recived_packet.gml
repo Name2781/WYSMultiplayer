@@ -132,6 +132,7 @@ switch(msgid)
         var sId = buffer_read(buffer, buffer_s16);
 
         inst.name = buffer_read(buffer, buffer_string);
+        inst.team = buffer_read(buffer, buffer_string);
         // inst.isSpectator = buffer_read(buffer, buffer_u8);
 
         ds_map_add(global.Clients, sId, inst);
@@ -261,15 +262,35 @@ switch(msgid)
 
             with (obj_hat_parent)
             {
-                if (!is_undefined(custom_player) && custom_player == inst)
+                if (!dead)
                 {
-                    if (!dead)
+                    if (object_index == obj_simple_hat) {
+                        with (obj_simple_hat) {
+                            if (variable_instance_exists(id,"custom_player")) {
+                                if (custom_player == obj_player)
+                                { 
+                                    dead = 1
+                                    powery = (13 + random(6))
+                                    angle = ((global.temporary_stuff - 40) + random(80))
+                                    xspeed = (random(6) - 3)
+                                    yspeed = -5
+                                }
+                            }
+                        }
+                    }
+
+                    if (object_index == obj_simple_hat_heart)
                     {
                         dead = 1
                         powery = (13 + random(6))
                         angle = ((global.temporary_stuff - 40) + random(80))
                         xspeed = (random(6) - 3)
                         yspeed = -5
+                        dramatic_death = 1
+                        yspeed = -8
+                        sound = audio_play_sound(sou_teleport_a, 0.85, false)
+                        audio_sound_gain_fx(sound, 0.4, 0)
+                        audio_sound_pitch(sound, 0.4)
                     }
                 }
             }
@@ -380,21 +401,63 @@ switch(msgid)
 
             with (obj_hat_parent)
             {
-                if (!is_undefined(custom_player) && custom_player == plr)
+                if (!dead)
                 {
-                    if (!dead)
+                    if (object_index == obj_simple_hat) {
+                        with (obj_simple_hat) {
+                            if (variable_instance_exists(id,"custom_player")) {
+                                if (custom_player == obj_player)
+                                { 
+                                    dead = 1
+                                    powery = (13 + random(6))
+                                    angle = ((global.temporary_stuff - 40) + random(80))
+                                    xspeed = (random(6) - 3)
+                                    yspeed = -5
+                                }
+                            }
+                        }
+                    }
+
+                    if (object_index == obj_simple_hat_heart)
                     {
                         dead = 1
                         powery = (13 + random(6))
                         angle = ((global.temporary_stuff - 40) + random(80))
                         xspeed = (random(6) - 3)
                         yspeed = -5
+                        dramatic_death = 1
+                        yspeed = -8
+                        sound = audio_play_sound(sou_teleport_a, 0.85, false)
+                        audio_sound_gain_fx(sound, 0.4, 0)
+                        audio_sound_pitch(sound, 0.4)
                     }
                 }
             }
-
+                
             created_hat.custom_player = plr
         }
+
+        break;
+
+    case 9: // TEMA
+        if (global.isHost)
+        {
+            inst.team = buffer_read(buffer, buffer_string);
+
+            var serverBuff = buffer_create(256, buffer_grow, 1);
+
+            buffer_write(serverBuff, buffer_string, inst.team)
+            buffer_write(serverBuff, buffer_s16, socket);
+        }
+
+        var funnyTeam = buffer_read(serverBuff, buffer_string)
+
+        var socketId = buffer_read(buffer, buffer_s16);
+
+        plr = ds_map_find_value(global.Clients, socketId);
+
+        plr.team = funnyTeam;
+
 
     default:
         // show_debug_message("Unknown packet");

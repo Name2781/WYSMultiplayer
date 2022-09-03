@@ -22,6 +22,7 @@ for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
     buffer_write(serverBuff, buffer_s16, 4);
     buffer_write(serverBuff, buffer_s16, ds_list_find_value(global.socketlist, i));
     buffer_write(serverBuff, buffer_string, plr.name);
+    buffer_write(serverBuff, buffer_string, plr.team);
 
     network_send_packet(sock, serverBuff, buffer_tell(serverBuff));
 
@@ -34,6 +35,7 @@ buffer_seek(serverBuff, buffer_seek_start, 0);
 buffer_write(serverBuff, buffer_s16, 4);
 buffer_write(serverBuff, buffer_s16, 0);
 buffer_write(serverBuff, buffer_string, global.name);
+buffer_write(serverBuff, buffer_string, obj_player.team);
 
 network_send_packet(sock, serverBuff, buffer_tell(serverBuff));
 

@@ -33,6 +33,7 @@ namespace WYSMultiplayer
             string gmlfolder = Path.Combine(currentMod.path, "GMLSource");
 
             LoadGMLFolder(gmlfolder);
+            LoadGMLFolder(Path.Combine(gmlfolder, "apis"));
 
             UndertaleGameObject mp_player_obj = new UndertaleGameObject();
 
@@ -51,6 +52,7 @@ namespace WYSMultiplayer
             data.Code.ByName("gml_Object_obj_ball_Step_1").ReplaceGmlSafe(GMLkvp["gml_Object_obj_ball_Step_1"], data);
             data.Code.ByName("gml_Object_obj_simple_hat_Other_10").ReplaceGmlSafe(GMLkvp["gml_Object_obj_simple_hat_Other_10"], data);
             data.Code.ByName("gml_GlobalScript_scr_spawn_correct_hat").ReplaceGmlSafe(GMLkvp["gml_GlobalScript_scr_spawn_correct_hat"], data);
+            data.Code.ByName("gml_Object_obj_player_Create_0").ReplaceGmlSafe(GMLkvp["gml_Object_obj_player_Create_0"], data);
 
             mp_player_obj.EventHandlerFor(EventType.Step, EventSubtypeStep.Step, data.Strings, data.Code, data.CodeLocals)
                 .AppendGmlSafe(GMLkvp["gml_Object_obj_mp_player_Step_0"], data);
@@ -81,6 +83,12 @@ namespace WYSMultiplayer
             CreateScriptFromKVP(data, "scr_player_join", "gml_Script_scr_player_join", 1);
 
             CreateScriptFromKVP(data, "scr_host_lpick", "gml_Script_scr_host_lpick", 0);
+
+            CreateScriptFromKVP(data, "scr_player_add_team", "gml_Script_scr_player_add_team", 2);
+
+            CreateScriptFromKVP(data, "scr_player_is_on_team", "gml_Script_scr_player_is_on_team", 2);
+
+            CreateScriptFromKVP(data, "scr_player_remove_team", "gml_Script_scr_player_remove_team", 2);
 
             data.CreateCode("gml_RoomCC_room_multiplayer_Create", GMLkvp["gml_RoomCC_room_multiplayer_Create"]);
 
@@ -128,7 +136,12 @@ namespace WYSMultiplayer
             try
             { // vk_ralt, vk_rcontrol
                 data.Code.First(code => code.Name.Content == "gml_Object_obj_player_Step_0")
-                    .AppendGML("if (keyboard_check_pressed(vk_f5) && !variable_global_exists('isHost'))\nscr_fade_to_room(room_multiplayer)\nif (keyboard_check_pressed(vk_f6) && variable_global_exists('isHost') && global.isHost)\nscr_host_lpick();", data);
+                    .AppendGmlSafe(@"if keyboard_check_pressed(vk_f5) && !variable_global_exists(""isHost"")
+    scr_fade_to_room(room_multiplayer)
+if (variable_global_exists(""isHost"")) {
+    if keyboard_check_pressed(vk_f6) && global.isHost
+        scr_host_lpick();
+}", data);
             } // vk_f5, vk_f6
             catch (Exception) { }
         }

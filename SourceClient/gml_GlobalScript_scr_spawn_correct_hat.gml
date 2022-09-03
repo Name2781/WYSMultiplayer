@@ -2,23 +2,35 @@ scr_spawn_correct_hat = function() //gml_Script_scr_spawn_correct_hat
 {
     with (obj_hat_parent)
     {
-        if (!is_undefined(custom_player) && custom_player == obj_player)
+        if (!dead)
         {
-            if (!dead)
+            if (object_index == obj_simple_hat) {
+                with (obj_simple_hat) {
+                    if (variable_instance_exists(id,"custom_player")) {
+                        if (custom_player == obj_player)
+                        { 
+                            dead = 1
+                            powery = (13 + random(6))
+                            angle = ((global.temporary_stuff - 40) + random(80))
+                            xspeed = (random(6) - 3)
+                            yspeed = -5
+                        }
+                    }
+                }
+            }
+            
+            if (object_index == obj_simple_hat_heart)
             {
                 dead = 1
                 powery = (13 + random(6))
                 angle = ((global.temporary_stuff - 40) + random(80))
                 xspeed = (random(6) - 3)
                 yspeed = -5
-                if (object_index == obj_simple_hat_heart)
-                {
-                    dramatic_death = 1
-                    yspeed = -8
-                    sound = audio_play_sound(sou_teleport_a, 0.85, false)
-                    audio_sound_gain_fx(sound, 0.4, 0)
-                    audio_sound_pitch(sound, 0.4)
-                }
+                dramatic_death = 1
+                yspeed = -8
+                sound = audio_play_sound(sou_teleport_a, 0.85, false)
+                audio_sound_gain_fx(sound, 0.4, 0)
+                audio_sound_pitch(sound, 0.4)
             }
         }
     }

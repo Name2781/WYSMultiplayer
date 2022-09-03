@@ -20,6 +20,7 @@ col_snail_shell = 0
 col_snail_eye = 0
 inputxy = 0
 input_jump = 0
+team = ""
 name = ""
 if instance_exists(obj_levelstyler)
 {
