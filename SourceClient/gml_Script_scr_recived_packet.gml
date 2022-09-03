@@ -477,14 +477,14 @@ switch(msgid)
                 plr.team = funnyTeam;
                 plr.teamName = "";
 
-                show_debug_message("Hiding team")
+                // show_debug_message("Hiding team")
             }
             else
             {
                 plr.team = funnyTeam;
                 plr.teamName = funnyTeam;
 
-                show_debug_message("Setting team to: " + string(funnyTeam))
+                // show_debug_message("Setting team to: " + string(funnyTeam))
             }
         }
 

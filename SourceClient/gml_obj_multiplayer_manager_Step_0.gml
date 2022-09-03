@@ -61,7 +61,7 @@ else {
         // scr_player_add_team(1, "Bozo", "Blind")
         // scr_player_add_team(obj_player, "Blind", "immajustsetthistoafaketeam")
 
-        show_debug_message(obj_player.team)
+        // show_debug_message(obj_player.team)
 
         for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
         {
