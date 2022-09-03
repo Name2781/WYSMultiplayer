@@ -58,8 +58,8 @@ else {
 		
         buffer_write(serverBuff, buffer_s16, 0);
 
-        scr_player_add_team(1, "Bozo", "Blind")
-        scr_player_add_team(obj_player, "Blind", "immajustsetthistoafaketeam")
+        // scr_player_add_team(1, "Bozo", "Blind")
+        // scr_player_add_team(obj_player, "Blind", "immajustsetthistoafaketeam")
 
         show_debug_message(obj_player.team)
 
