@@ -133,6 +133,7 @@ switch(msgid)
 
         inst.name = buffer_read(buffer, buffer_string);
         inst.team = buffer_read(buffer, buffer_string);
+        inst.teamName = inst.team
         // inst.isSpectator = buffer_read(buffer, buffer_u8);
 
         ds_map_add(global.Clients, sId, inst);
@@ -439,31 +440,53 @@ switch(msgid)
 
         break;
 
-    case 9: // TEMA
+    case 9: // TEAM
         if (global.isHost)
         {
             inst.team = buffer_read(buffer, buffer_string);
             var hideTeam = buffer_read(buffer, buffer_string);
 
             if (hideTeam == obj_player.team)
-                inst.team = "";
+                inst.teamName = "";
+            else
+                inst.teamName = inst.team
 
             var serverBuff = buffer_create(256, buffer_grow, 1);
 
+            buffer_write(serverBuff, buffer_s16, 9);
             buffer_write(serverBuff, buffer_string, inst.team)
             buffer_write(serverBuff, buffer_string, hideTeam)
             buffer_write(serverBuff, buffer_s16, socket);
         }
+        else
+        {
+            var funnyTeam = buffer_read(buffer, buffer_string)
+            var hideTeam = buffer_read(buffer, buffer_string);
 
-        var funnyTeam = buffer_read(serverBuff, buffer_string)
-        var hideTeam = buffer_read(buffer, buffer_string);
+            var socketId = buffer_read(buffer, buffer_s16);
 
-        var socketId = buffer_read(buffer, buffer_s16);
+            var plr = ds_map_find_value(global.Clients, socketId);
 
-        plr = ds_map_find_value(global.Clients, socketId);
+            if (is_undefined(plr))
+                break;
+            if (is_undefined(obj_player))
+                break;
 
-        if (hideTeam != obj_player.team)
-            plr.team = funnyTeam;
+            if (hideTeam == obj_player.team)
+            {
+                plr.team = funnyTeam;
+                plr.teamName = "";
+
+                show_debug_message("Hiding team")
+            }
+            else
+            {
+                plr.team = funnyTeam;
+                plr.teamName = funnyTeam;
+
+                show_debug_message("Setting team to: " + string(funnyTeam))
+            }
+        }
 
         break;
 

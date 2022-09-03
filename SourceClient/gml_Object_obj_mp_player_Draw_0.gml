@@ -6,7 +6,7 @@ draw_set_valign(fa_middle)
 if (team == "")
     draw_text_transformed(x, y - 50, name, 0.5, 0.5, 0)
 else
-    draw_text_transformed(x, y - 50,  team + " " + name, 0.5, 0.5, 0)
+    draw_text_transformed(x, y - 50,  teamName + " " + name, 0.5, 0.5, 0)
 
 house_height = lerp(house_height, (1 + (vspeed * 0.05)), 0.2)
 house_height = clamp(house_height, 0.4, 1.6)

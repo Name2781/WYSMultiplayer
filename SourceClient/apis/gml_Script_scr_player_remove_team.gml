@@ -2,7 +2,14 @@ if (ds_map_size(global.Clients) == 0) {
     return false;
 }
 
-var plr = ds_map_find_value(global.Clients, argument0)
+if argument0 == obj_player
+{
+    plr = obj_player
+}
+else
+{
+    var plr = ds_map_find_value(global.Clients, argument0)
+}
 
 if (is_undefined(plr))
     return false;
@@ -15,8 +22,10 @@ if (global.isHost)
 
     buffer_seek(buff, buffer_seek_start, 0);
 
+    buffer_write(buff, buffer_s16, 9);
     buffer_write(buff, buffer_string, plr.team);
-    buffer_write(buff, buffer_string, argument2);
+    buffer_write(buff, buffer_string, "l3LK&1nOWmfKYtUiVGUQ0d4rQCq1Q!T5uvsE!O!td&t1R&ZofB");
+    buffer_write(buff, buffer_s16, 0);
 
     for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
     {
@@ -31,8 +40,9 @@ else
 
     buffer_seek(buff, buffer_seek_start, 0);
 
+    buffer_write(buff, buffer_s16, 9);
     buffer_write(buff, buffer_string, plr.team);
-    buffer_write(buff, buffer_string, argument2);
+    buffer_write(buff, buffer_string, "l3LK&1nOWmfKYtUiVGUQ0d4rQCq1Q!T5uvsE!O!td&t1R&ZofB"); // random string when removing teams so make packet code smaller, legit just used a password genorator
 
     network_send_packet(global.clientTCP, buff, buffer_get_size(buff));
 

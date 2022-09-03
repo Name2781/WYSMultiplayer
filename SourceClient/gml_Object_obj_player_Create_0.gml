@@ -4,6 +4,7 @@ if (!instance_exists(obj_ai_representation))
         instance_create_layer((room_width / 2), (room_height / 2), "AI_Representation", obj_ai_representation)
 }
 audio_falloff_set_model(5)
+teamName = ""
 team = ""
 dragging_power_connection = -1
 gamepad_rumble = 0
