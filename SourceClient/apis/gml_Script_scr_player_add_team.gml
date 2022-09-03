@@ -16,6 +16,7 @@ if (global.isHost)
     buffer_seek(buff, buffer_seek_start, 0);
 
     buffer_write(buff, buffer_string, plr.team);
+    buffer_write(buff, buffer_string, argument2);
 
     for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
     {
@@ -31,6 +32,7 @@ else
     buffer_seek(buff, buffer_seek_start, 0);
 
     buffer_write(buff, buffer_string, plr.team);
+    buffer_write(buff, buffer_string, argument2);
 
     network_send_packet(global.clientTCP, buff, buffer_get_size(buff));
 

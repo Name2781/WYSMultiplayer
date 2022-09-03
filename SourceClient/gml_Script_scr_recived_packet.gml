@@ -443,21 +443,29 @@ switch(msgid)
         if (global.isHost)
         {
             inst.team = buffer_read(buffer, buffer_string);
+            var hideTeam = buffer_read(buffer, buffer_string);
+
+            if (hideTeam == obj_player.team)
+                inst.team = "";
 
             var serverBuff = buffer_create(256, buffer_grow, 1);
 
             buffer_write(serverBuff, buffer_string, inst.team)
+            buffer_write(serverBuff, buffer_string, hideTeam)
             buffer_write(serverBuff, buffer_s16, socket);
         }
 
         var funnyTeam = buffer_read(serverBuff, buffer_string)
+        var hideTeam = buffer_read(buffer, buffer_string);
 
         var socketId = buffer_read(buffer, buffer_s16);
 
         plr = ds_map_find_value(global.Clients, socketId);
 
-        plr.team = funnyTeam;
+        if (hideTeam != obj_player.team)
+            plr.team = funnyTeam;
 
+        break;
 
     default:
         // show_debug_message("Unknown packet");

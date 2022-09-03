@@ -84,11 +84,11 @@ namespace WYSMultiplayer
 
             CreateScriptFromKVP(data, "scr_host_lpick", "gml_Script_scr_host_lpick", 0);
 
-            CreateScriptFromKVP(data, "scr_player_add_team", "gml_Script_scr_player_add_team", 2);
+            CreateScriptFromKVP(data, "scr_player_add_team", "gml_Script_scr_player_add_team", 3);
 
             CreateScriptFromKVP(data, "scr_player_is_on_team", "gml_Script_scr_player_is_on_team", 2);
 
-            CreateScriptFromKVP(data, "scr_player_remove_team", "gml_Script_scr_player_remove_team", 2);
+            CreateScriptFromKVP(data, "scr_player_remove_team", "gml_Script_scr_player_remove_team", 3);
 
             data.CreateCode("gml_RoomCC_room_multiplayer_Create", GMLkvp["gml_RoomCC_room_multiplayer_Create"]);
 
