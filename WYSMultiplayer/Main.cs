@@ -90,6 +90,12 @@ namespace WYSMultiplayer
 
             CreateScriptFromKVP(data, "scr_player_remove_team", "gml_Script_scr_player_remove_team", 3);
 
+            CreateScriptFromKVP(data, "scr_register_packet", "gml_Script_scr_register_packet", 1);
+
+            CreateScriptFromKVP(data, "scr_send_packet", "gml_Script_scr_send_packet", 17);
+
+            CreateScriptFromKVP(data, "scr_write_data", "gml_Script_scr_write_data", 17);
+
             data.CreateCode("gml_RoomCC_room_multiplayer_Create", GMLkvp["gml_RoomCC_room_multiplayer_Create"]);
 
             try

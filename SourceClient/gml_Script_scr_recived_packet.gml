@@ -491,7 +491,19 @@ switch(msgid)
         break;
 
     default:
-        // show_debug_message("Unknown packet");
+        if (global.isHost)
+        {
+            if (!is_undefined(ds_list_find_value(global.custom_packets, msgid)))
+            {
+                script_execute(ds_list_find_value(global.custom_packets_callbacks, msgid))
+            }
+
+            // global.custom_packets
+        }
+        else 
+        {
+
+        }
 
         break;
 }

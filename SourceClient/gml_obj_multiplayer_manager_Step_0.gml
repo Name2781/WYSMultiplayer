@@ -101,6 +101,21 @@ else {
             }
 
             buffer_delete(buff);
+
+            with obj_simple_hat
+            {
+                if (!dead)
+                {
+                    if (old = 1)
+                    {
+                        dead = 1
+                        powery = (13 + random(6))
+                        angle = ((global.temporary_stuff - 40) + random(80))
+                        xspeed = (random(6) - 3)
+                        yspeed = -5
+                    }
+                }
+            }
         }
 
         if (global.isSpectator) {
@@ -142,6 +157,21 @@ else {
                 network_send_packet(global.clientTCP, buff, buffer_get_size(buff));
 
                 buffer_delete(buff);
+
+                with obj_simple_hat
+                {
+                    if (!dead)
+                    {
+                        if (old = 1)
+                        {
+                            dead = 1
+                            powery = (13 + random(6))
+                            angle = ((global.temporary_stuff - 40) + random(80))
+                            xspeed = (random(6) - 3)
+                            yspeed = -5
+                        }
+                    }
+                }
 
                 global.oldHatId = global.save_equipped_hat;
             }

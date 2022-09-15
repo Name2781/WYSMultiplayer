@@ -1,24 +1,29 @@
 scr_spawn_correct_hat = function() //gml_Script_scr_spawn_correct_hat
 {
+    global.set = 1
+
     with (obj_hat_parent)
     {
         if (!dead)
         {
-            if (object_index == obj_simple_hat) {
-                with (obj_simple_hat) {
-                    if (variable_instance_exists(id,"custom_player")) {
-                        if (custom_player == obj_player)
-                        { 
-                            dead = 1
-                            powery = (13 + random(6))
-                            angle = ((global.temporary_stuff - 40) + random(80))
-                            xspeed = (random(6) - 3)
-                            yspeed = -5
+            if (object_index == obj_simple_hat)
+            {
+                while (global.set)
+                {
+                    if (variable_instance_exists(id,"play_objc"))
+                    {
+                        if play_objc == obj_player
+                        {
+                            with (obj_simple_hat)
+                            {
+                                old = 1
+                                global.set = 0
+                            }
                         }
                     }
                 }
             }
-            
+
             if (object_index == obj_simple_hat_heart)
             {
                 dead = 1
@@ -70,6 +75,8 @@ scr_spawn_correct_hat = function() //gml_Script_scr_spawn_correct_hat
             created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat_heart)
             break
     }
+
+    show_debug_message("worked!!!")
 
     return;
 }
