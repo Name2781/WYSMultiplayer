@@ -9,6 +9,11 @@ if (variable_instance_exists(id,"custom_player"))
 	}
 }
 
+if (!instance_exists(play_objc))
+{
+	return false;
+}
+
 visible = play_objc.visible
 yconnection = (play_objc.y + 15)
 if (eye == 1)
