@@ -114,8 +114,8 @@ else {
                 }
             }
 
-            show_debug_message(global.oldHatId)
-            show_debug_message(global.save_equipped_hat)
+            // show_debug_message(global.oldHatId)
+            // show_debug_message(global.save_equipped_hat)
 
             global.oldHatId = global.save_equipped_hat;
         }
@@ -175,8 +175,8 @@ else {
                     }
                 }
 
-                show_debug_message(global.oldHatId)
-                show_debug_message(global.save_equipped_hat)
+                // show_debug_message(global.oldHatId)
+                // show_debug_message(global.save_equipped_hat)
 
                 global.oldHatId = global.save_equipped_hat;
             }
