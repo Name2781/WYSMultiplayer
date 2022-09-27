@@ -2,7 +2,7 @@ var play_objc = undefined;
 
 if (instance_exists(obj_player) && !variable_instance_exists(id,"custom_player"))
 {
-    play_objc == obj_player
+    play_objc = obj_player // its not fucking ==
 }
 
 playerHat = 0
