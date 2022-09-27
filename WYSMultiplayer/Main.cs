@@ -96,6 +96,8 @@ namespace WYSMultiplayer
 
             CreateScriptFromKVP(data, "scr_write_data", "gml_Script_scr_write_data", 17);
 
+            Conviences.ReplaceBuiltInFunction("scr_mp_fade_to_room_ext", "gml_Script_scr_fade_to_room_ext", GMLkvp["gml_Script_scr_mp_fade_to_room_ext"], 2, data);
+
             data.CreateCode("gml_RoomCC_room_multiplayer_Create", GMLkvp["gml_RoomCC_room_multiplayer_Create"]);
 
             try

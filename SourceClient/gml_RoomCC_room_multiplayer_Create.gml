@@ -3,6 +3,8 @@ global.state = "waiting";
 global.spectating = 0;
 global.oldDifficulty = 0;
 global.oldHatId = 0;
+global.killhat = 0
+global.team = ""
 
 if(variable_global_exists("isHost"))
     return false;
@@ -26,6 +28,11 @@ if show_question("Host a game?") {
     global.isReady = true;
 
     global.state = "inGame";
+
+    if room_exists(T_01_first_contact)
+    {
+        room_goto(T_01_first_contact);
+    }
 } else {
     global.isHost = false;
     global.hostIp = get_string("Enter the hosts ip: ", "127.0.0.1");
@@ -57,6 +64,11 @@ if show_question("Host a game?") {
     global.isReady = true;
 
     global.state = "inGame";
+
+    if room_exists(level_select)
+    {
+        room_goto(level_select);
+    }
 }
 
 var socketlist = ds_list_create();

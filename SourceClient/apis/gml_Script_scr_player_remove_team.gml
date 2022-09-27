@@ -5,6 +5,7 @@ if (ds_map_size(global.Clients) == 0) {
 if argument0 == obj_player
 {
     plr = obj_player
+    global.team = ""
 }
 else
 {

@@ -92,9 +92,6 @@ else {
             buffer_write(buff, buffer_s8, global.save_equipped_hat);
             buffer_write(buff, buffer_s16, 0);
 
-
-            global.oldHatId = global.save_equipped_hat;
-
             for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
             {
                 network_send_packet(ds_list_find_value(global.socketlist, i), buff, buffer_tell(buff));
@@ -116,6 +113,11 @@ else {
                     }
                 }
             }
+
+            show_debug_message(global.oldHatId)
+            show_debug_message(global.save_equipped_hat)
+
+            global.oldHatId = global.save_equipped_hat;
         }
 
         if (global.isSpectator) {
@@ -172,6 +174,9 @@ else {
                         }
                     }
                 }
+
+                show_debug_message(global.oldHatId)
+                show_debug_message(global.save_equipped_hat)
 
                 global.oldHatId = global.save_equipped_hat;
             }

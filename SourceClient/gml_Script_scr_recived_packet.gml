@@ -259,7 +259,7 @@ switch(msgid)
         var created_hat = undefined;
 
         if (global.isHost) { 
-            var hatId = buffer_read(buffer, buffer_s8)
+            global.hatId = buffer_read(buffer, buffer_s8)
 
             with (obj_hat_parent)
             {
@@ -268,7 +268,7 @@ switch(msgid)
                     if (object_index == obj_simple_hat) {
                         with (obj_simple_hat) {
                             if (variable_instance_exists(id,"custom_player")) {
-                                if (custom_player == obj_player)
+                                if (custom_player == inst && global.hatId != hatId)
                                 { 
                                     dead = 1
                                     powery = (13 + random(6))
@@ -297,7 +297,7 @@ switch(msgid)
             }
 
             // I love how gamemaker fails to detect that i just want to make a variable like i get it but its also kinda annoying and sometimes creates very stupid bugs
-            switch hatId
+            switch global.hatId
             {
                 case 0:
                     created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
@@ -331,17 +331,12 @@ switch(msgid)
                     break
             }
 
-            if (is_undefined(created_hat))
-                break
-
-            created_hat.custom_player = inst
-
             var buff = buffer_create(256, buffer_grow, 1);
 
             buffer_seek(buff, buffer_seek_start, 0);
 
             buffer_write(buff, buffer_s16, 8);
-            buffer_write(buff, buffer_s8, hatId);
+            buffer_write(buff, buffer_s8, global.hatId);
             buffer_write(buff, buffer_s16, socket);
 
             for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
@@ -352,10 +347,59 @@ switch(msgid)
                 
                 network_send_packet(ds_list_find_value(global.socketlist, i), buff, buffer_tell(buff));
             }
-        } else {
-            var hatId = buffer_read(buffer, buffer_s8)
 
-            switch hatId
+            if (is_undefined(created_hat))
+                break
+
+            created_hat.hatId = global.hatId
+
+            created_hat.custom_player = inst
+        } else {
+            global.hatId = buffer_read(buffer, buffer_s8)
+
+            var socketId = buffer_read(buffer, buffer_s16);
+
+            plr = ds_map_find_value(global.Clients, socketId);
+
+            // show_debug_message("Starting hat packet")
+
+            with (obj_hat_parent)
+            {
+                if (!dead)
+                {
+                    if (object_index == obj_simple_hat) {
+                        with (obj_simple_hat) {
+                            if (variable_instance_exists(id,"custom_player")) {
+                                if (custom_player == plr && global.hatId != hatId)
+                                { 
+                                    // show_debug_message("Killing hat for player: " + string(plr.name))
+                                    dead = 1
+                                    powery = (13 + random(6))
+                                    angle = ((global.temporary_stuff - 40) + random(80))
+                                    xspeed = (random(6) - 3)
+                                    yspeed = -5
+                                }
+                            }
+                        }
+                    }
+
+                    if (object_index == obj_simple_hat_heart)
+                    {
+                        dead = 1
+                        powery = (13 + random(6))
+                        angle = ((global.temporary_stuff - 40) + random(80))
+                        xspeed = (random(6) - 3)
+                        yspeed = -5
+                        dramatic_death = 1
+                        yspeed = -8
+                        sound = audio_play_sound(sou_teleport_a, 0.85, false)
+                        audio_sound_gain_fx(sound, 0.4, 0)
+                        audio_sound_pitch(sound, 0.4)
+                    }
+                }
+            }
+
+            switch global.hatId
             {
                 case 0:
                     var created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
@@ -392,48 +436,15 @@ switch(msgid)
             if (is_undefined(created_hat))
                 break
 
-            var socketId = buffer_read(buffer, buffer_s16);
-
-            plr = ds_map_find_value(global.Clients, socketId);
+            // show_debug_message("Hat packet 2")
 
             if (is_undefined(plr) || !instance_exists(plr)) {
                 break;
             }
 
-            with (obj_hat_parent)
-            {
-                if (!dead)
-                {
-                    if (object_index == obj_simple_hat) {
-                        with (obj_simple_hat) {
-                            if (variable_instance_exists(id,"custom_player")) {
-                                if (custom_player == obj_player)
-                                { 
-                                    dead = 1
-                                    powery = (13 + random(6))
-                                    angle = ((global.temporary_stuff - 40) + random(80))
-                                    xspeed = (random(6) - 3)
-                                    yspeed = -5
-                                }
-                            }
-                        }
-                    }
+            // show_debug_message("Editing hat for player: " + string(plr.name))
 
-                    if (object_index == obj_simple_hat_heart)
-                    {
-                        dead = 1
-                        powery = (13 + random(6))
-                        angle = ((global.temporary_stuff - 40) + random(80))
-                        xspeed = (random(6) - 3)
-                        yspeed = -5
-                        dramatic_death = 1
-                        yspeed = -8
-                        sound = audio_play_sound(sou_teleport_a, 0.85, false)
-                        audio_sound_gain_fx(sound, 0.4, 0)
-                        audio_sound_pitch(sound, 0.4)
-                    }
-                }
-            }
+            created_hat.hatId = global.hatId
                 
             created_hat.custom_player = plr
         }
@@ -457,6 +468,17 @@ switch(msgid)
             buffer_write(serverBuff, buffer_string, inst.team)
             buffer_write(serverBuff, buffer_string, hideTeam)
             buffer_write(serverBuff, buffer_s16, socket);
+
+            for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
+            {
+                if (ds_list_find_value(global.socketlist, i) == socket) {
+                    continue;
+                }
+                
+                network_send_packet(ds_list_find_value(global.socketlist, i), serverBuff, buffer_tell(serverBuff));
+            }
+
+            buffer_delete(serverBuff)
         }
         else
         {
@@ -486,6 +508,306 @@ switch(msgid)
 
                 // show_debug_message("Setting team to: " + string(funnyTeam))
             }
+        }
+
+        break;
+
+    case 10: // sync room packet, or as I call it Hat sync 2: Electric bogaloo
+        // update to sync players that are in room also so everyone has hats
+
+        if (global.isHost)
+        {
+            global.roomId = buffer_read(buffer, buffer_s16)
+            global.hatId = buffer_read(buffer, buffer_s8)
+
+            var sBuff = buffer_create(256, buffer_grow, 1); // sync buffer
+
+            buffer_write(sBuff, buffer_s16, 11);
+            buffer_write(sBuff, buffer_s16, socket);
+
+            for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
+            {         
+                if (ds_list_find_value(global.socketlist, i) == socket) {
+                    continue;
+                }
+
+                network_send_packet(ds_list_find_value(global.socketlist, i), sBuff, buffer_tell(sBuff));
+            }
+
+            buffer_delete(sBuff)
+
+            if (room != global.roomId)
+            {
+                var serverBuff = buffer_create(256, buffer_grow, 1);
+
+                buffer_write(serverBuff, buffer_s16, 10);
+                buffer_write(serverBuff, buffer_s16, global.roomId)
+                buffer_write(serverBuff, buffer_s8, global.hatId)
+                buffer_write(serverBuff, buffer_s16, socket);
+
+                for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
+                {         
+                    if (ds_list_find_value(global.socketlist, i) == socket) {
+                        continue;
+                    }
+
+                    network_send_packet(ds_list_find_value(global.socketlist, i), serverBuff, buffer_tell(serverBuff));
+                }
+
+                buffer_seek(serverBuff, buffer_seek_start, 0)
+
+                buffer_write(serverBuff, buffer_s16, 10);
+                buffer_write(serverBuff, buffer_s16, room)
+                buffer_write(serverBuff, buffer_s8, -1)
+                buffer_write(serverBuff, buffer_s16, 0);
+
+                network_send_packet(socket, serverBuff, buffer_tell(serverBuff))
+
+                buffer_delete(serverBuff)
+
+                break
+            }
+
+            with(inst)
+            {
+                if (room == global.roomId)
+                {
+                    var created_hat = undefined;
+
+                    switch global.hatId
+                    {
+                        case 0:
+                            created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                            created_hat.sprite_index = spr_hat_cylinder
+                            break
+                        case 1:
+                            created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                            created_hat.sprite_index = spr_hat_shelly
+                            break
+                        case 3:
+                            created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat_rider)
+                            created_hat.sprite_index = spr_hat_human
+                            break
+                        case 2:
+                            created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                            created_hat.sprite_index = spr_hat_unicorn
+                            created_hat.glued_to_hat = 1
+                            break
+                        case 4:
+                            created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                            created_hat.sprite_index = spr_hat_winter
+                            break
+                        case 5:
+                            created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                            created_hat.sprite_index = spr_hat_squid
+                            created_hat.glued_to_hat = 1
+                            break
+                        case 6:
+                            created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                            created_hat.sprite_index = spr_hat_poopoo
+                            break
+                    }
+
+                    if (!is_undefined(created_hat))
+                        created_hat.custom_player = inst
+                }
+            }
+
+            var serverBuff = buffer_create(256, buffer_grow, 1);
+
+            buffer_write(serverBuff, buffer_s16, 10);
+            buffer_write(serverBuff, buffer_s16, global.roomId)
+            buffer_write(serverBuff, buffer_s8, global.hatId)
+            buffer_write(serverBuff, buffer_s16, socket);
+
+            for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
+            {       
+                if (ds_list_find_value(global.socketlist, i) == socket) {
+                    continue;
+                }
+
+                network_send_packet(ds_list_find_value(global.socketlist, i), serverBuff, buffer_tell(serverBuff));
+            }
+
+            buffer_seek(serverBuff, buffer_seek_start, 0)
+
+            buffer_write(serverBuff, buffer_s16, 10);
+            buffer_write(serverBuff, buffer_s16, room)
+            buffer_write(serverBuff, buffer_s8, global.save_equipped_hat)
+            buffer_write(serverBuff, buffer_s16, 0);
+
+            network_send_packet(socket, serverBuff, buffer_tell(serverBuff))
+
+            buffer_delete(serverBuff)
+        }
+        else
+        {
+            global.roomId = buffer_read(buffer, buffer_s16)
+            global.hatId = buffer_read(buffer, buffer_s8)
+
+            var socketId = buffer_read(buffer, buffer_s16);
+
+            plr = ds_map_find_value(global.Clients, socketId);
+
+            if (room != global.roomId)
+                break
+
+            if (socketId == 0)
+            {
+                var buff = buffer_create(256, buffer_grow, 1);
+
+                buffer_seek(buff, buffer_seek_start, 0);
+
+                buffer_write(buff, buffer_s16, 11);
+                buffer_write(buff, buffer_s16, room);
+                buffer_write(buff, buffer_s8, global.save_equipped_hat);
+                buffer_write(buff, buffer_s16, 1337);
+                buffer_write(buff, buffer_bool, true); // skip it cause we just want to spawn it on the host and not relay it
+
+                network_send_packet(global.clientTCP, buff, buffer_get_size(buff));
+
+                buffer_delete(buff);
+            }
+
+            with(plr)
+            {
+                if (room == global.roomId)
+                {
+                    var created_hat = undefined;
+
+                    switch global.hatId
+                    {
+                        case 0:
+                            created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                            created_hat.sprite_index = spr_hat_cylinder
+                            break
+                        case 1:
+                            created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                            created_hat.sprite_index = spr_hat_shelly
+                            break
+                        case 3:
+                            created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat_rider)
+                            created_hat.sprite_index = spr_hat_human
+                            break
+                        case 2:
+                            created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                            created_hat.sprite_index = spr_hat_unicorn
+                            created_hat.glued_to_hat = 1
+                            break
+                        case 4:
+                            created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                            created_hat.sprite_index = spr_hat_winter
+                            break
+                        case 5:
+                            created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                            created_hat.sprite_index = spr_hat_squid
+                            created_hat.glued_to_hat = 1
+                            break
+                        case 6:
+                            created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                            created_hat.sprite_index = spr_hat_poopoo
+                            break
+                    }
+
+                    if (!is_undefined(created_hat))
+                        created_hat.custom_player = plr
+                }
+            }
+        }
+
+        break;
+
+    case 11: // look mom more hat sync (hat query)
+        if (global.isHost)
+        {
+            // send player socket, hat id, and room basically send a room sync with every player
+            global.roomId = buffer_read(buffer, buffer_s16)
+            global.hatId = buffer_read(buffer, buffer_s8)
+
+            var target = buffer_read(buffer, buffer_s16); // target
+
+            var skip = buffer_read(buffer, buffer_bool)
+
+            // plr = ds_map_find_value(global.Clients, socketId);
+
+            if (room == global.roomId && skip)
+            {
+                with(inst)
+                {
+                    if (room == global.roomId)
+                    {
+                        var created_hat = undefined;
+
+                        switch global.hatId
+                        {
+                            case 0:
+                                created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                                created_hat.sprite_index = spr_hat_cylinder
+                                break
+                            case 1:
+                                created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                                created_hat.sprite_index = spr_hat_shelly
+                                break
+                            case 3:
+                                created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat_rider)
+                                created_hat.sprite_index = spr_hat_human
+                                break
+                            case 2:
+                                created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                                created_hat.sprite_index = spr_hat_unicorn
+                                created_hat.glued_to_hat = 1
+                                break
+                            case 4:
+                                created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                                created_hat.sprite_index = spr_hat_winter
+                                break
+                            case 5:
+                                created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                                created_hat.sprite_index = spr_hat_squid
+                                created_hat.glued_to_hat = 1
+                                break
+                            case 6:
+                                created_hat = instance_create_layer(-200, -200, "Player_Eyes", obj_simple_hat)
+                                created_hat.sprite_index = spr_hat_poopoo
+                                break
+                        }
+
+                        if (!is_undefined(created_hat))
+                            created_hat.custom_player = inst
+                    }
+                }
+
+                break
+            }
+
+            var serverBuff = buffer_create(256, buffer_grow, 1);
+
+            buffer_write(serverBuff, buffer_s16, 10);
+            buffer_write(serverBuff, buffer_s16, global.roomId)
+            buffer_write(serverBuff, buffer_s8, global.hatId)
+            buffer_write(serverBuff, buffer_s16, socket);
+
+            network_send_packet(target, serverBuff, buffer_tell(serverBuff))
+
+            buffer_delete(serverBuff)
+        }
+        else
+        {
+            var target = buffer_read(buffer, buffer_s16);
+
+            var buff = buffer_create(256, buffer_grow, 1);
+
+            buffer_seek(buff, buffer_seek_start, 0);
+
+            buffer_write(buff, buffer_s16, 11);
+            buffer_write(buff, buffer_s16, room);
+            buffer_write(buff, buffer_s8, global.save_equipped_hat);
+            buffer_write(buff, buffer_s16, target);
+            buffer_write(buff, buffer_bool, false);
+
+            network_send_packet(global.clientTCP, buff, buffer_get_size(buff));
+
+            buffer_delete(buff);
         }
 
         break;

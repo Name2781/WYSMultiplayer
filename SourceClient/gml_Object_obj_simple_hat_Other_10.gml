@@ -1,11 +1,28 @@
-var play_objc = obj_player
+var play_objc = undefined;
+
+if (instance_exists(obj_player) && !variable_instance_exists(id,"custom_player"))
+{
+    play_objc == obj_player
+}
+
+playerHat = 0
+
+hatId = 0
 
 old = 0
+
+global.killHat = id
+
+if (variable_global_exists("isHost"))
+{
+    if (play_objc == obj_player)
+        playerHat = 1
+}
 
 if (variable_instance_exists(id,"custom_player"))
 {
 	play_objc = custom_player
-    
+    playerHat = 0
     if (!instance_exists(custom_player))
     {
         instance_destroy()
