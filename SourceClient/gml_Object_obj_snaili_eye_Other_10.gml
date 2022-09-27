@@ -2,25 +2,7 @@ var play_objc = undefined
 
 if (instance_exists(obj_player) && !variable_instance_exists(id,"custom_player"))
 {
-<<<<<<< HEAD
     play_objc = obj_player
-=======
-    play_objc = obj_player // its not fucking ==
-}
-
-playerHat = 0
-
-hatId = 0
-
-old = 0
-
-global.killHat = id
-
-if (variable_global_exists("isHost"))
-{
-    if (play_objc == obj_player)
-        playerHat = 1
->>>>>>> d708a11d6780b55f753bda28036dd9cdf6ddc95e
 }
 
 if (variable_instance_exists(id,"custom_player"))
@@ -56,7 +38,6 @@ eye_wind_lerpsi = lerp(eye_wind_lerpsi, min((play_objc.speed / 10), 1), 0.1)
 lerpspeedmulti = 1
 if global.underwater
 {
-<<<<<<< HEAD
 	lerpspeedmulti = 0.5
 	xtarget += lengthdir_x((3 * eye_wind_lerpsi), (time * 12))
 	ytarget += lengthdir_y((4 * eye_wind_lerpsi), (time * 9.5))
@@ -82,8 +63,3 @@ look_lerp_x = lerp(look_lerp_x, play_objc.lookdir, 0.1)
 look_lerp_y = lerp(look_lerp_y, clamp((-play_objc.vspeed), 0, 1), 0.2)
 dist = point_distance(x, y, xconnection, yconnection)
 dir = point_direction(xconnection, yconnection, x, y)
-=======
-    yspeed *= 0.9
-    xspeed *= 0.95
-}
->>>>>>> d708a11d6780b55f753bda28036dd9cdf6ddc95e
