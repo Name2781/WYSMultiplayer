@@ -6,8 +6,11 @@ global.oldHatId = 0;
 global.killhat = 0
 global.team = ""
 
-if(variable_global_exists("isHost"))
-    return false;
+if (!global.justReset)
+{
+    if(variable_global_exists("isHost"))
+        return false;
+}
 
 if show_question("Host a game?") {
     global.isHost = true;
@@ -70,6 +73,8 @@ if show_question("Host a game?") {
         room_goto(level_select);
     }
 }
+
+global.justReset = false
 
 var socketlist = ds_list_create();
 var Clients = ds_map_create();

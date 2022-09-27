@@ -96,13 +96,14 @@ namespace WYSMultiplayer
 
             CreateScriptFromKVP(data, "scr_write_data", "gml_Script_scr_write_data", 17);
 
+            CreateScriptFromKVP(data, "scr_mp_disconnect", "gml_Script_scr_mp_disconnect", 0);
+
             Conviences.ReplaceBuiltInFunction("scr_mp_fade_to_room_ext", "gml_Script_scr_fade_to_room_ext", GMLkvp["gml_Script_scr_mp_fade_to_room_ext"], 2, data);
 
             data.CreateCode("gml_RoomCC_room_multiplayer_Create", GMLkvp["gml_RoomCC_room_multiplayer_Create"]);
 
             try
             {
-
                 data.Code.First(code => code.Name.Content == "gml_Object_obj_epilepsy_warning_Create_0")
                     .AppendGML("txt_1 = \"WORKS\"\ntxt_2 = \"The fitness gram pacer test is \na multi stage arobic capacity test.", data);
             }
@@ -141,15 +142,43 @@ namespace WYSMultiplayer
                 Conviences.PrependCode("gml_Object_obj_snaili_eye_Draw_0", "if (!variable_instance_exists(id, \"dir\"))\nreturn false; ", data);
             }
 
+            data.HookCode("gml_Object_obj_menu_MAIN_Other_10", @"#orig#()
+if (variable_global_exists(""isHost""))
+{
+    ds_list_add(liMenuItemNames, ""Disconnect"")
+    ds_list_add(liMenuItemInstances, -1)
+    ds_list_add(liMenuItemScripts, scr_mp_disconnect)
+    ds_list_add(liMenuItemScriptArguments, -1)
+    ds_list_add(liMenuItemTooltipScript, -1)
+    ds_list_add(liMenuItemTooltipArgument, -1)
+}
+");
+
             try
             { // vk_ralt, vk_rcontrol
                 data.Code.First(code => code.Name.Content == "gml_Object_obj_player_Step_0")
-                    .AppendGmlSafe(@"if keyboard_check_pressed(vk_f5) && !variable_global_exists(""isHost"")
+                    .AppendGmlSafe(@"
+if keyboard_check_pressed(vk_f5) && !variable_global_exists(""isHost"")
+{
+    global.justReset = false
     scr_fade_to_room(room_multiplayer)
+}
 if (variable_global_exists(""isHost"")) {
     if keyboard_check_pressed(vk_f6) && global.isHost
         scr_host_lpick();
-}", data);
+}
+
+if (variable_global_exists(""justReset""))
+{
+    if (global.justReset)
+    {
+        if keyboard_check_pressed(vk_f5) && variable_global_exists(""isHost"")
+        {
+            room_goto(room_multiplayer)
+        }
+    }
+}
+", data);
             } // vk_f5, vk_f6
             catch (Exception) { }
         }
