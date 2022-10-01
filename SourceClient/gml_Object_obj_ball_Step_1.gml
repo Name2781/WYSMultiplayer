@@ -66,31 +66,34 @@ if place_meeting(x, y, obj_player)
         }
     }
 
-    var buff = buffer_create(256, buffer_grow, 1);
+    if (variable_global_exists("isHost"))
+    {
+        var buff = buffer_create(256, buffer_grow, 1);
 
-    buffer_seek(buff, buffer_seek_start, 0);
+        buffer_seek(buff, buffer_seek_start, 0);
 
-    buffer_write(buff, buffer_s16, 7);
-    buffer_write(buff, buffer_u16, room);
-    buffer_write(buff, buffer_f32, x);
-    buffer_write(buff, buffer_f32, y);
-    buffer_write(buff, buffer_f32, hspeed);
-    buffer_write(buff, buffer_f32, vspeed);
-    buffer_write(buff, buffer_f32, speed);
-    buffer_write(buff, buffer_s32, ballx_prev1);
-    buffer_write(buff, buffer_s32, bally_prev1);
-    buffer_write(buff, buffer_s32, direction);
+        buffer_write(buff, buffer_s16, 7);
+        buffer_write(buff, buffer_u16, room);
+        buffer_write(buff, buffer_f32, x);
+        buffer_write(buff, buffer_f32, y);
+        buffer_write(buff, buffer_f32, hspeed);
+        buffer_write(buff, buffer_f32, vspeed);
+        buffer_write(buff, buffer_f32, speed);
+        buffer_write(buff, buffer_s32, ballx_prev1);
+        buffer_write(buff, buffer_s32, bally_prev1);
+        buffer_write(buff, buffer_s32, direction);
 
-    if (global.isHost) {
-        for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
-        {
-            network_send_packet(ds_list_find_value(global.socketlist, i), buff, buffer_tell(buff));
+        if (global.isHost) {
+            for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
+            {
+                network_send_packet(ds_list_find_value(global.socketlist, i), buff, buffer_tell(buff));
+            }
+        } else {
+            network_send_packet(global.clientTCP, buff, buffer_get_size(buff));
         }
-    } else {
-        network_send_packet(global.clientTCP, buff, buffer_get_size(buff));
-    }
 
-    buffer_delete(buff);
+        buffer_delete(buff);
+    }
 }
 if place_meeting(x, y, obj_basketboss)
 {
