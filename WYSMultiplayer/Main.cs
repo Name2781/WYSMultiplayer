@@ -34,6 +34,7 @@ namespace WYSMultiplayer
 
             LoadGMLFolder(gmlfolder);
             LoadGMLFolder(Path.Combine(gmlfolder, "apis"));
+            LoadGMLFolder(Path.Combine(gmlfolder, "gamemodes"));
 
             UndertaleGameObject mp_player_obj = new UndertaleGameObject();
 
@@ -131,10 +132,75 @@ namespace WYSMultiplayer
 
             mp_room.SetupRoom(false);
 
-
             data.Rooms.Add(mp_room);
 
-            // Conviences.PrependCode
+            UndertaleRoom levelselect = data.Rooms.First(room => room.Name.Content == "level_select");
+
+            UndertaleRoom.GameObject gameobj = levelselect.GameObjects.First(obj => obj.ObjectDefinition.Name.Content == "obj_player");
+
+            UndertaleRoom mp_basketball = Conviences.CreateBlankLevelRoom("mp_basketball", data);
+
+            mp_basketball.SetupRoom(false);
+
+            var player = mp_basketball.AddObjectToLayer(data, "obj_player", "Player");
+
+            player.Y = 990;
+            player.X = 90;
+
+            mp_basketball.AddObjectToLayer(data, "obj_dontRestartLevelOnDifficultyChange", "FadeOutIn").X = -180;
+            mp_basketball.AddObjectToLayer(data, "obj_dark_level", "FadeOutIn").X = -180;
+            mp_basketball.AddObjectToLayer(data, "obj_music_bubble_gum", "FadeOutIn").X = -180; // maybe obj_music_helpy
+            mp_basketball.AddObjectToLayer(data, "obj_no_squid_in_this_level", "FadeOutIn").X = -180;
+
+            mp_basketball.AddObjectToLayer(data, "obj_post_processing_draw", "PostProcessing").X = -180;
+
+            var ball = mp_basketball.AddObjectToLayer(data, "obj_ball", "MiniGames");
+
+            ball.Y = 1080 - (60 * 3);
+            ball.X = 1920 / 2;
+
+            var basket = mp_basketball.AddObjectToLayer(data, "obj_basket", "Traps");
+
+            basket.Y = 1080 - (60 * 8);
+            basket.X = (60 * 2);
+
+            basket = mp_basketball.AddObjectToLayer(data, "obj_basket", "Traps");
+
+            basket.Y = 1080 - (60 * 8);
+            basket.X = 1920 - (60 * 2);
+
+            var wall = mp_basketball.AddObjectToLayer(data, "obj_wall", "Walls");
+            wall.ScaleY = 17;
+
+            wall = mp_basketball.AddObjectToLayer(data, "obj_wall", "Walls");
+
+            wall.X = 1860;
+            wall.ScaleY = 17;
+
+            var floor = mp_basketball.AddObjectToLayer(data, "obj_wall", "Walls");
+
+            floor.Y = 1020;
+            floor.ScaleX = 32;
+
+            mp_room.CreationCodeId = data.Code.ByName("gml_RoomCC_room_multiplayer_Create");
+
+            mp_basketball.SetupRoom(false);
+
+            data.Rooms.Add(mp_basketball);
+
+            UndertaleRoom.GameObject portal = levelselect.AddObjectToLayer(data,"obj_level_select_portal","Goal");
+
+            portal.X = gameobj.X + (60 * 150);
+            portal.Y = gameobj.Y - 180;
+
+            portal.CreationCode = data.CreateCode("gml_ObjectCC_obj_level_select_portal_Create",GMLkvp["gml_ObjectCC_obj_level_select_portal_Create"],0);
+
+            UndertaleRoom.GameObject volleyball = levelselect.AddObjectToLayer(data, "obj_level_select_portal", "Goal");
+
+            volleyball.X = portal.X + 60;
+            volleyball.Y = portal.Y;
+
+            volleyball.CreationCode = data.CreateCode("gml_ObjectCC_obj_level_select_portal_2_Create", GMLkvp["gml_ObjectCC_obj_level_select_portal_2_Create"], 0);
 
             UndertaleCode code = data.Code.First(c => c.Name.Content == "gml_Object_obj_snaili_eye_Draw_0");
             if (code != null)
