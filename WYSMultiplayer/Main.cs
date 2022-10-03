@@ -32,9 +32,7 @@ namespace WYSMultiplayer
             //supress vs being stupid (i mean he's not wrong)
             string gmlfolder = Path.Combine(currentMod.path, "GMLSource");
 
-            LoadGMLFolder(gmlfolder);
-            LoadGMLFolder(Path.Combine(gmlfolder, "apis"));
-            LoadGMLFolder(Path.Combine(gmlfolder, "gamemodes"));
+            LoadGMLFolderRecursive(gmlfolder);
 
             UndertaleGameObject mp_player_obj = new UndertaleGameObject();
 
@@ -143,7 +141,7 @@ namespace WYSMultiplayer
             mp_basketball.SetupRoom(false);
 
             var player = mp_basketball.AddObjectToLayer(data, "obj_player", "Player");
-
+            
             player.Y = 990;
             player.X = 90;
 
@@ -248,6 +246,19 @@ if (variable_global_exists(""justReset""))
             } // vk_f5, vk_f6
             catch (Exception) { }
         }
+
+        public static void LoadGMLFolderRecursive(string gmlfolder, string skip = "")
+        {
+            if (gmlfolder != skip)
+                LoadGMLFolder(gmlfolder);
+
+            string[] directoies = Directory.GetDirectories(gmlfolder);
+
+            for (int i = 0; i < directoies.Length; i++)
+            {
+                LoadGMLFolder(directoies[i]);
+                LoadGMLFolderRecursive(directoies[i], directoies[i]);
+            }
+        }
     }
-    
 }
