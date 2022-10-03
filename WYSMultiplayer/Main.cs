@@ -207,14 +207,17 @@ namespace WYSMultiplayer
             }
 
             data.HookCode("gml_Object_obj_menu_MAIN_Other_10", @"#orig#()
-if (variable_global_exists(""serverTCP"") || variable_global_exists(""clientTCP""))
+if (variable_global_exists(""serverTCP"") || variable_global_exists(""clientTCP"") && variable_global_exists(""justReset""))
 {
-    ds_list_add(liMenuItemNames, ""Disconnect"")
-    ds_list_add(liMenuItemInstances, -1)
-    ds_list_add(liMenuItemScripts, scr_mp_disconnect)
-    ds_list_add(liMenuItemScriptArguments, -1)
-    ds_list_add(liMenuItemTooltipScript, -1)
-    ds_list_add(liMenuItemTooltipArgument, -1)
+    if (!global.justReset)
+    {
+        ds_list_add(liMenuItemNames, ""Disconnect"")
+        ds_list_add(liMenuItemInstances, -1)
+        ds_list_add(liMenuItemScripts, scr_mp_disconnect)
+        ds_list_add(liMenuItemScriptArguments, -1)
+        ds_list_add(liMenuItemTooltipScript, -1)
+        ds_list_add(liMenuItemTooltipArgument, -1)
+    }
 }
 ");
 
