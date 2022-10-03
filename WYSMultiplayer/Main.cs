@@ -207,7 +207,7 @@ namespace WYSMultiplayer
             }
 
             data.HookCode("gml_Object_obj_menu_MAIN_Other_10", @"#orig#()
-if (variable_global_exists(""isHost""))
+if (variable_global_exists(""serverTCP"") || variable_global_exists(""clientTCP""))
 {
     ds_list_add(liMenuItemNames, ""Disconnect"")
     ds_list_add(liMenuItemInstances, -1)
