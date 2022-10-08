@@ -138,6 +138,8 @@ switch(msgid)
 
         ds_map_add(global.Clients, sId, inst);
 
+        show_debug_message("New player")
+
         break;
 
     case 5: // LEVEL_SELECT
