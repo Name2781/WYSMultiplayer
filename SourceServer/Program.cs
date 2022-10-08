@@ -35,7 +35,6 @@ class WYSMPServer
         }
         finally
         {
-            // Stop listening for new clients.
             server.Stop();
         }
 
@@ -58,14 +57,12 @@ class WYSMPServer
 
             playerDatas.Add(plrData);
 
-            // Get a stream object for reading and writing
             NetworkStream stream = client.GetStream();
 
             Networking.Packets.playerJoinSequence(clients, client, playerDatas);
 
             int i;
 
-            // Loop to receive all the data sent by the client.
             while((i = stream.Read(bytes, 0, bytes.Length))!=0)
             {
                 int x = int.MaxValue;
@@ -107,7 +104,6 @@ class WYSMPServer
                             break;
 
                         case 6:
-                            // Console.WriteLine(String.Join(" ", bytes));
                             plrData.name = reader.ReadBytes(242);
                             break;
 
@@ -130,14 +126,10 @@ class WYSMPServer
                     switch (packetId)
                     {
                         case 0:
-                        // Console.WriteLine($"id: {packetId} x: {x} y: {y} hspeed: {hspeed} vspeed: {vspeed} inputxy: {inputxy} inputjump: {inputjump} packetId: {packetId} room: {room} isSpectator: {isSpectator}");
                             Networking.Packets.SendMovementPacket(x, y, hspeed, vspeed, inputxy, inputjump, room, isSpectator, clients, client);
                             break;
 
                         case 6:
-                            // Console.WriteLine(plrData.name);
-                            // Console.WriteLine(String.Join(" ", bytes));
-                            // Console.WriteLine(Encoding.ASCII.GetString(bytes));
                             Networking.Packets.SendPlayerNamePacket(plrData.name, clients, client);
                             break;
 
@@ -151,18 +143,7 @@ class WYSMPServer
                     }
                 }
             } 
-            // Console.WriteLine("Received: {0}", String.Join(" ", bytes));
-
-            // Process the data sent by the client.
-            // data = data.ToUpper();
-
-            // byte[] msg = System.Text.Encoding.ASCII.GetBytes();
-
-            // Send back a response.
-            // stream.Write(msg, 0, msg.Length);
-            // Console.WriteLine("Sent: {0}", data);
-
-            // Shutdown and end connection
+            
             client.Close();
         }
         catch
