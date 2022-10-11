@@ -118,9 +118,23 @@ switch(msgid)
     case 3: // PLRLEAVE_CMD
         var sId = buffer_read(buffer, buffer_s16);
 
-        plr = ds_map_find_value(global.Clients, sId);
+        global.plr = ds_map_find_value(global.Clients, sId);
 
-        with(plr) { instance_destroy(); }
+        with (obj_simple_hat)
+        {
+            if (!variable_instance_exists(id,"play_objc"))
+                continue;
+
+            if (is_undefined("play_objc"))
+                continue;
+
+            if (play_objc == global.plr)
+            {
+                instance_destroy();
+            }
+        }
+
+        with(global.plr) { instance_destroy(); }
 
         ds_map_delete(global.Clients, sId);
 

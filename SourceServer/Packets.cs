@@ -6,22 +6,6 @@ namespace Networking
 {
     public class Packets
     {
-        public static void test()
-        {
-            byte[] message = new byte[268];
-
-            Stream buffer = new MemoryStream(message);
-
-            using (var writer = new BinaryWriter(buffer))
-            {
-                writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
-                writer.Write(4);
-                writer.Write(4);
-                writer.Write("Testing");
-                writer.Write("Names testing team");
-            }
-        }
-
         public static void playerJoinSequence(List<TcpClient> clients, TcpClient newPlayer, List<PlayerData> playerDatas)
         {
             byte[] message = new byte[268];
@@ -43,8 +27,6 @@ namespace Networking
                     continue;
 
                 client.GetStream().Write(message, 0, message.Length);
-
-                // Console.WriteLine($"Sent a join packet to {clients.IndexOf(client)}");
             }
 
             foreach (TcpClient client in clients)
@@ -67,6 +49,19 @@ namespace Networking
 
                 newPlayer.GetStream().Write(message, 0, message.Length);
             }
+
+            message = new byte[268];
+
+            buffer = new MemoryStream(message);
+
+            using (var writer = new BinaryWriter(buffer))
+            {
+                writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
+                writer.Write((short)1);
+                writer.Write((ushort)0); // EASY = 3, inf easy = 0
+            }
+
+            newPlayer.GetStream().Write(message, 0, message.Length);
         }
 
         public static void SendBasketballPacket(short bRoom, float nX, float nY, float nH, float nV, float nS, float nBX, float nBY, float nDir, List<TcpClient> clients, TcpClient player)
@@ -135,10 +130,6 @@ namespace Networking
 
             Stream buffer = new MemoryStream(message);
 
-            // Console.WriteLine("----------------");
-            // Console.WriteLine(name);
-            // Console.WriteLine(name.Length);
-
             using (var writer = new BinaryWriter(buffer))
             {
                 writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
@@ -146,8 +137,6 @@ namespace Networking
                 writer.Write((short)clients.IndexOf(socket));
                 writer.Write(name);
             }
-
-            // Console.WriteLine(String.Join(" ", message));
 
             foreach (TcpClient client in clients)
             {
@@ -158,7 +147,7 @@ namespace Networking
             }
         }
 
-        public static byte[] TestPacket()
+        public static void SendHatPacket(sbyte hat, List<TcpClient> clients, TcpClient socket)
         {
             byte[] message = new byte[268];
 
@@ -167,13 +156,128 @@ namespace Networking
             using (var writer = new BinaryWriter(buffer))
             {
                 writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
-                writer.Write(4);
-                writer.Write(4);
-                writer.Write("Testing");
-                writer.Write("Names testing team");
+                writer.Write((short)8);
+                writer.Write(hat);
+                writer.Write((short)clients.IndexOf(socket));
             }
 
-            return message;
+            foreach (TcpClient client in clients)
+            {
+                if (client.Equals(socket))
+                    continue;
+
+                client.GetStream().Write(message, 0, message.Length);
+            }
+        }
+
+        public static void SendRoomSyncPacket(short roomId, sbyte hatId, List<TcpClient> clients, TcpClient socket)
+        {
+            byte[] message = new byte[268];
+
+            Stream buffer = new MemoryStream(message);
+
+            using (var writer = new BinaryWriter(buffer))
+            {
+                writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
+                writer.Write((short)10);
+                writer.Write(roomId);
+                writer.Write(hatId);
+                writer.Write((short)clients.IndexOf(socket));
+            }
+
+            foreach (TcpClient client in clients)
+            {
+                if (client.Equals(socket))
+                    continue;
+
+                client.GetStream().Write(message, 0, message.Length);
+            }
+        }
+
+        public static void SendHatQueryPacket(List<TcpClient> clients, TcpClient socket)
+        {
+            byte[] message = new byte[268];
+
+            Stream buffer = new MemoryStream(message);
+
+            using (var writer = new BinaryWriter(buffer))
+            {
+                writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
+                writer.Write((short)11);
+                writer.Write((short)clients.IndexOf(socket));
+            }
+
+            foreach (TcpClient client in clients)
+            {
+                if (client.Equals(socket))
+                    continue;
+
+                client.GetStream().Write(message, 0, message.Length);
+            }
+        }
+
+        public static void SendRoomSyncPacket(short roomId, sbyte hatId, short target, List<TcpClient> clients, TcpClient socket)
+        {
+            byte[] message = new byte[268];
+
+            Stream buffer = new MemoryStream(message);
+
+            using (var writer = new BinaryWriter(buffer))
+            {
+                writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
+                writer.Write((short)10);
+                writer.Write(roomId);
+                writer.Write(hatId);
+                writer.Write((short)clients.IndexOf(socket));
+            }
+
+            clients[target].GetStream().Write(message, 0, message.Length);
+        }
+
+        public static void SendPlayerLeavePacket(List<TcpClient> clients, TcpClient socket)
+        {
+            byte[] message = new byte[268];
+
+            Stream buffer = new MemoryStream(message);
+
+            using (var writer = new BinaryWriter(buffer))
+            {
+                writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
+                writer.Write((short)3);
+                writer.Write((short)clients.IndexOf(socket));
+            }
+
+            foreach (TcpClient client in clients)
+            {
+                if (client.Equals(socket))
+                    continue;
+
+                client.GetStream().Write(message, 0, message.Length);
+            }
+        }
+
+        public static void SendTeamPacket(PlayerData data, List<TcpClient> clients, TcpClient socket)
+        {
+            byte[] message = new byte[268];
+
+            Stream buffer = new MemoryStream(message);
+
+            using (var writer = new BinaryWriter(buffer))
+            {
+                writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
+                writer.Write((short)9);
+                writer.Write(data.team);
+                writer.Write(data.hideTeam);
+                writer.Write((short)clients.IndexOf(socket));
+            }
+
+            foreach (TcpClient client in clients)
+            {
+                if (client.Equals(socket))
+                    continue;
+
+                client.GetStream().Write(message, 0, message.Length);
+            }
         }
     }
 }

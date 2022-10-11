@@ -5,5 +5,6 @@ namespace Server.Types
         public byte[]? name { get; set; }
         public byte[]? team { get; set; }
         public byte[]? teamName { get; set; }
+        public byte[]? hideTeam { get; set; }
     }
 }

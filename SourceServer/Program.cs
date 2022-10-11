@@ -2,11 +2,14 @@
 using System.Net.Sockets;
 using System.Text;
 using Server.Types;
+using Server;
 
 class WYSMPServer
 {
+    public static int nextClientId = 0;
     static List<TcpClient> clients = new List<TcpClient>();
     static List<PlayerData> playerDatas = new List<PlayerData>();
+    public static bool useNext = false;
 
     public static void Main()
     {
@@ -18,27 +21,38 @@ class WYSMPServer
             TcpClient client;
             listener.Start();
 
-            Console.WriteLine($"Server started on port 25565");
+            Logger.Log($"Server started on port 25565");
+
+            Thread.Sleep(100); 
 
             while (true)
             {
                 client = listener.AcceptTcpClient();
-                clients.Add(client);
+
+                if (useNext)
+                {
+                    clients.Insert(nextClientId, client);
+                }
+                else
+                {
+                    clients.Add(client);
+                }
+
                 ThreadPool.QueueUserWorkItem(ClientThread, client);
 
-                Console.WriteLine("New client connected");
+                Logger.Log("New client connected");
             }
         }
         catch(SocketException e)
         {
-            Console.WriteLine("SocketException: {0}", e);
+            Logger.Log($"SocketException: {e}", Logger.LogLevel.Error);
         }
         finally
         {
             server.Stop();
         }
 
-        Console.WriteLine("\nHit enter to continue...");
+        Logger.Log("\nHit enter to continue...");
         Console.Read();
     }
 
@@ -46,16 +60,24 @@ class WYSMPServer
     {
         var client = (TcpClient)obj;
 
+        PlayerData plrData = new PlayerData();
+
         try
         {
             Byte[] bytes = new Byte[268];  
 
-            PlayerData plrData = new PlayerData();
-
             plrData.team = new Byte[0];
             plrData.teamName = new Byte[0];
 
-            playerDatas.Add(plrData);
+            if (useNext)
+            {
+                playerDatas.Insert(WYSMPServer.nextClientId, plrData);
+                useNext = false;
+            }
+            else
+            {
+                playerDatas.Add(plrData);
+            }
 
             NetworkStream stream = client.GetStream();
 
@@ -63,26 +85,32 @@ class WYSMPServer
 
             int i;
 
-            while((i = stream.Read(bytes, 0, bytes.Length))!=0)
+            int x = int.MaxValue;
+            int y = int.MaxValue;
+            float hspeed = float.MaxValue;
+            float vspeed = float.MaxValue;
+            float inputxy = float.MaxValue;
+            byte inputjump = byte.MaxValue;
+            short packetId = short.MaxValue;
+            short room = short.MaxValue;
+            bool isSpectator = false;
+            short bRoom = short.MaxValue;
+            float nX = float.MaxValue;
+            float nY = float.MaxValue;
+            float nH = float.MaxValue;
+            float nV = float.MaxValue;
+            float nS = float.MaxValue;
+            float nBX = float.MaxValue;
+            float nBY = float.MaxValue;
+            float nDir = float.MaxValue;
+            sbyte hat = sbyte.MaxValue;
+            short roomId = short.MaxValue;
+            sbyte hatId = sbyte.MaxValue;
+            short target = short.MaxValue;
+            bool skip = false;
+
+            while((i = stream.Read(bytes, 0, bytes.Length)) !=0)
             {
-                int x = int.MaxValue;
-                int y = int.MaxValue;
-                float hspeed = float.MaxValue;
-                float vspeed = float.MaxValue;
-                float inputxy = float.MaxValue;
-                byte inputjump = byte.MaxValue;
-                short packetId = short.MaxValue;
-                short room = short.MaxValue;
-                bool isSpectator = false;
-                short bRoom = short.MaxValue;
-                float nX = float.MaxValue;
-                float nY = float.MaxValue;
-                float nH = float.MaxValue;
-                float nV = float.MaxValue;
-                float nS = float.MaxValue;
-                float nBX = float.MaxValue;
-                float nBY = float.MaxValue;
-                float nDir = float.MaxValue;
 
                 Stream buffer = new MemoryStream(bytes[12..bytes.Length]); // why does gm add 12 garbage bytes idk but fuck them for it
 
@@ -118,6 +146,26 @@ class WYSMPServer
                             nBY = reader.ReadSingle();
                             nDir = reader.ReadSingle();
                             break;
+
+                        case 8:
+                            hat = (sbyte)reader.ReadByte(); // please work
+                            break;
+
+                        case 9:
+                            // plrData
+                            break;
+
+                        case 10:
+                            roomId = reader.ReadInt16();
+                            hatId = (sbyte)reader.ReadByte();
+                            break;
+
+                        case 11:
+                            roomId = reader.ReadInt16();
+                            hatId = (sbyte)reader.ReadByte();
+                            target = reader.ReadInt16();
+                            skip = reader.ReadBoolean();
+                            break;
                     }
                 }
 
@@ -137,18 +185,43 @@ class WYSMPServer
                             Networking.Packets.SendBasketballPacket(bRoom, nX, nY, nH, nV, nS, nBX, nBY, nDir, clients, client);
                             break;
 
+                        case 8:
+                            Networking.Packets.SendHatPacket(hat, clients, client);
+                            break;
+
+                        case 9:
+
+                            break;
+
+                        case 10:
+                            Networking.Packets.SendRoomSyncPacket(roomId, hatId, clients, client);
+                            Networking.Packets.SendHatQueryPacket(clients, client);
+                            break;
+
+                        case 11:
+                            if (skip)
+                                break;
+
+                            Networking.Packets.SendRoomSyncPacket(roomId, hatId, target, clients, client);
+                            break;
+
                         default:
-                            Console.WriteLine($"unknown packet, id: {packetId}");
+                            Logger.Log($"unknown packet, id: {packetId}", Logger.LogLevel.Warn);
                             break;
                     }
                 }
             } 
-            
+
             client.Close();
         }
         catch
         {
-            Console.WriteLine("Disconnecing a client due to an error or them leaving");
+            Logger.Log("Disconnecing a client due to an error or them leaving");
+            WYSMPServer.nextClientId = clients.IndexOf(client);
+            Networking.Packets.SendPlayerLeavePacket(clients, client);
+            useNext = true;
+            clients.Remove(client);
+            playerDatas.Remove(plrData);
             client.Close();
         }
     }
