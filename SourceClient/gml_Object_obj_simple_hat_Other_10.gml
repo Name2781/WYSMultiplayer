@@ -29,6 +29,11 @@ if (variable_instance_exists(id,"custom_player"))
     }
 }
 
+if (!instance_exists(play_objc))
+{
+	return false;
+}
+
 visible = play_objc.visible
 
 if victory

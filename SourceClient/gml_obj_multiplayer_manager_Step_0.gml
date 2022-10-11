@@ -43,20 +43,26 @@ else {
     global.iteration = 0;
 
     if(global.isHost && global.isReady) {
-        var serverBuff = buffer_create(256, buffer_grow, 1);
+        if (obj_player.x != global.oldx || obj_player.y != global.oldy)
+        {
+            var serverBuff = buffer_create(256, buffer_grow, 1);
 
-        buffer_seek(serverBuff, buffer_seek_start, 0);
-        buffer_write(serverBuff, buffer_s16, 0);
-        buffer_write(serverBuff, buffer_s32, obj_player.x); //x
-		buffer_write(serverBuff, buffer_s32, obj_player.y); //y
-		buffer_write(serverBuff, buffer_f32, obj_player.hspeed); //hspeed
-		buffer_write(serverBuff, buffer_f32, obj_player.vspeed); //vspeed
-		buffer_write(serverBuff, buffer_f32, global.input_x); //inputxy
-		buffer_write(serverBuff, buffer_u8, global.input_jump); //inputjump
-		buffer_write(serverBuff, buffer_u16, room); //room
-        buffer_write(serverBuff, buffer_bool, global.isSpectator); // isSpectator
-		
-        buffer_write(serverBuff, buffer_s16, 0);
+            buffer_seek(serverBuff, buffer_seek_start, 0);
+            buffer_write(serverBuff, buffer_s16, 0);
+            buffer_write(serverBuff, buffer_s32, obj_player.x); //x
+            buffer_write(serverBuff, buffer_s32, obj_player.y); //y
+            buffer_write(serverBuff, buffer_f32, obj_player.hspeed); //hspeed
+            buffer_write(serverBuff, buffer_f32, obj_player.vspeed); //vspeed
+            buffer_write(serverBuff, buffer_f32, global.input_x); //inputxy
+            buffer_write(serverBuff, buffer_u8, global.input_jump); //inputjump
+            buffer_write(serverBuff, buffer_u16, room); //room
+            buffer_write(serverBuff, buffer_bool, global.isSpectator); // isSpectator
+            
+            buffer_write(serverBuff, buffer_s16, 0);
+
+            global.oldx = obj_player.x;
+            global.oldy = obj_player.y;
+        }
 
         // scr_player_add_team(1, "Bozo", "Blind")
         // scr_player_add_team(obj_player, "Blind", "immajustsetthistoafaketeam")
@@ -146,7 +152,13 @@ else {
     } else {
         if (global.state == "inGame" && global.isReady) {
             // TODO: send if the player is jumping and spawn particles
-            scr_send_position(obj_player.x, obj_player.y, obj_player.hspeed, obj_player.vspeed, global.input_x, global.input_jump, room, global.isSpectator);
+            if (obj_player.x != global.oldx || obj_player.y != global.oldy)
+            {
+                scr_send_position(obj_player.x, obj_player.y, obj_player.hspeed, obj_player.vspeed, global.input_x, global.input_jump, room, global.isSpectator);
+                
+                global.oldx = obj_player.x;
+                global.oldy = obj_player.y;
+            }
 
             if (global.oldHatId != global.save_equipped_hat) {
                 var buff = buffer_create(256, buffer_grow, 1);

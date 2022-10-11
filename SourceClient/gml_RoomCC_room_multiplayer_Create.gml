@@ -5,6 +5,8 @@ global.oldDifficulty = 0;
 global.oldHatId = 0;
 global.killhat = 0
 global.team = ""
+global.oldx = 0;
+global.oldy = 0;
 
 if (!global.justReset)
 {
@@ -22,7 +24,7 @@ if show_question("Host a game?") {
 
     global.isSpectator = show_question("Spectate?");
 
-    serverTCP = network_create_server(network_socket_tcp, port, 32);
+    serverTCP = network_create_server_raw(network_socket_tcp, port, 32);
 
     global.serverTCP = serverTCP;
 
@@ -48,7 +50,7 @@ if show_question("Host a game?") {
 
     clientTCP = network_create_socket(network_socket_tcp);
 
-    network_connect(clientTCP, global.hostIp, global.port);
+    network_connect_raw(clientTCP, global.hostIp, global.port);
 
     var cBuff = buffer_create(256, buffer_grow, 1);
 
