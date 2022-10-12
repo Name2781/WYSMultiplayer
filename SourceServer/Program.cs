@@ -3,9 +3,11 @@ using System.Net.Sockets;
 using System.Text;
 using Server.Types;
 using Server;
+using MP.Extensions;
 
 class WYSMPServer
 {
+    public static ExtensionLoader extensionLoader = null;
     public static int nextClientId = 0;
     static List<TcpClient> clients = new List<TcpClient>();
     static List<PlayerData> playerDatas = new List<PlayerData>();
@@ -14,6 +16,8 @@ class WYSMPServer
     public static void Main()
     {
         TcpListener server=null;
+
+        extensionLoader = new ExtensionLoader("plugins");
 
         try
         {
@@ -108,6 +112,7 @@ class WYSMPServer
             sbyte hatId = sbyte.MaxValue;
             short target = short.MaxValue;
             bool skip = false;
+            bool cancelled = false;
 
             while((i = stream.Read(bytes, 0, bytes.Length)) !=0)
             {
@@ -169,7 +174,17 @@ class WYSMPServer
                     }
                 }
 
-                if (packetId != -16162)
+                foreach(Func<int, byte[], TcpClient, List<TcpClient>, bool> onPacket in extensionLoader.onPacket)
+                {
+                    bool cancel = onPacket(packetId, bytes[12..bytes.Length], client, clients);
+
+                    if (cancel != null)
+                    {
+                        cancelled = cancel;
+                    }
+                }
+
+                if (packetId != -16162 && !cancelled)
                 {
                     switch (packetId)
                     {
