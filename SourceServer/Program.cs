@@ -175,7 +175,7 @@ class WYSMPServer
 
                 foreach(Func<int, byte[], TcpClient, List<TcpClient>, bool?> onPacket in extensionLoader.onPacket)
                 {
-                    bool? cancel = onPacket(packetId, bytes[12..bytes.Length], client, clients);
+                    bool? cancel = onPacket(packetId, bytes[14..bytes.Length], client, clients);
 
                     if (cancel != null)
                     {
