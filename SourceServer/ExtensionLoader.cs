@@ -6,7 +6,7 @@ using System.Reflection;
 class ExtensionLoader
 {
     public Dictionary<String, IExtension> extensions = new Dictionary<String, IExtension>();
-    public List<Func<int, byte[], TcpClient, List<TcpClient>, bool>> onPacket = new List<Func<int, byte[], TcpClient, List<TcpClient>, bool>>();
+    public List<Func<int, byte[], TcpClient, List<TcpClient>, bool?>> onPacket = new List<Func<int, byte[], TcpClient, List<TcpClient>, bool?>>();
 
     public ExtensionLoader(String extPath)
     {

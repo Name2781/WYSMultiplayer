@@ -828,6 +828,66 @@ switch(msgid)
 
         break;
 
+    case 12:
+        switch (buffer_read(buffer, buffer_s16))
+        {
+            case 0: // add
+                var buff = buffer_create(256, buffer_grow, 1);
+
+                var type = buffer_read(buffer, buffer_string)
+
+                var layer = buffer_read(buffer, buffer_string)
+
+                var createdObj = instance_create_layer(0, 0, layer, asset_get_index(type))
+
+                createdObj.x = buffer_read(buffer, buffer_s32);
+                createdObj.y = buffer_read(buffer, buffer_s32);
+
+                buffer_seek(buff, buffer_seek_start, 0);
+
+                buffer_write(buff, buffer_s16, 12);
+
+                buffer_write(buff, buffer_s32, createdObj.id);
+
+                network_send_packet(global.clientTCP, buff, buffer_get_size(buff));
+
+                buffer_delete(buff);
+
+                break;
+
+            case 1: // remove
+                with (buffer_read(buffer, buffer_s32))
+                {
+                    instance_destroy();
+                }
+
+                break;
+
+            case 2: // move
+                global.Nx = buffer_read(buffer, buffer_s32);
+                global.Ny = buffer_read(buffer, buffer_s32);
+                with (buffer_read(buffer, buffer_s32))
+                {
+                    x = global.Nx
+                    y = global.Ny
+                }
+
+                break;
+
+            case 4:
+                global.Nx = buffer_read(buffer, buffer_f32);
+	    	    global.Ny = buffer_read(buffer, buffer_f32);
+
+                with (buffer_read(buffer, buffer_s32))
+                {
+                    image_xscale = global.Nx
+                    image_yscale = global.Ny
+                }
+                break;
+        }
+
+        break;
+
     default:
         if (global.isHost)
         {

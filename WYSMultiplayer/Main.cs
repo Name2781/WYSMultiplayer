@@ -225,7 +225,7 @@ if (variable_global_exists(""serverTCP"") || variable_global_exists(""clientTCP"
             { // vk_ralt, vk_rcontrol
                 data.Code.First(code => code.Name.Content == "gml_Object_obj_player_Step_0")
                     .AppendGmlSafe(@"
-if keyboard_check_pressed(vk_f5) && !variable_global_exists(""isHost"")
+if keyboard_check_pressed(vk_ralt) && !variable_global_exists(""isHost"")
 {
     global.justReset = false
     scr_fade_to_room(room_multiplayer)
@@ -239,7 +239,7 @@ if (variable_global_exists(""justReset""))
 {
     if (global.justReset)
     {
-        if keyboard_check_pressed(vk_f5) && variable_global_exists(""isHost"")
+        if keyboard_check_pressed(vk_ralt) && variable_global_exists(""isHost"")
         {
             room_goto(room_multiplayer)
         }

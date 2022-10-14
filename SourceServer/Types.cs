@@ -7,4 +7,13 @@ namespace Server.Types
         public byte[]? teamName { get; set; }
         public byte[]? hideTeam { get; set; }
     }
+
+    public class GameObject
+    {
+        public int id { get; set; }
+        public int x = 0;
+        public int y = 0;
+        public float xscale = 1;
+        public float yscale = 1;
+    }
 }

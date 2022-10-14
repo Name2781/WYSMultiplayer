@@ -66,8 +66,8 @@ class WYSMPServer
 
         PlayerData plrData = new PlayerData();
 
-        try
-        {
+        // try
+        // {
             Byte[] bytes = new Byte[268];  
 
             plrData.team = new Byte[0];
@@ -116,9 +116,8 @@ class WYSMPServer
 
             while((i = stream.Read(bytes, 0, bytes.Length)) !=0)
             {
-
                 Stream buffer = new MemoryStream(bytes[12..bytes.Length]); // why does gm add 12 garbage bytes idk but fuck them for it
-
+                
                 using (var reader = new BinaryReader(buffer, Encoding.Unicode, false))
                 {   
                     packetId = reader.ReadInt16();
@@ -174,13 +173,13 @@ class WYSMPServer
                     }
                 }
 
-                foreach(Func<int, byte[], TcpClient, List<TcpClient>, bool> onPacket in extensionLoader.onPacket)
+                foreach(Func<int, byte[], TcpClient, List<TcpClient>, bool?> onPacket in extensionLoader.onPacket)
                 {
-                    bool cancel = onPacket(packetId, bytes[12..bytes.Length], client, clients);
+                    bool? cancel = onPacket(packetId, bytes[12..bytes.Length], client, clients);
 
                     if (cancel != null)
                     {
-                        cancelled = cancel;
+                        cancelled = (bool)cancel;
                     }
                 }
 
@@ -220,6 +219,9 @@ class WYSMPServer
                             Networking.Packets.SendRoomSyncPacket(roomId, hatId, target, clients, client);
                             break;
 
+                        case 12:
+                            break;
+
                         default:
                             Logger.Log($"unknown packet, id: {packetId}", Logger.LogLevel.Warn);
                             break;
@@ -228,7 +230,7 @@ class WYSMPServer
             } 
 
             client.Close();
-        }
+        /*}
         catch
         {
             Logger.Log("Disconnecing a client due to an error or them leaving");
@@ -238,6 +240,6 @@ class WYSMPServer
             clients.Remove(client);
             playerDatas.Remove(plrData);
             client.Close();
-        }
+        } */
     }
 }

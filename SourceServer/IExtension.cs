@@ -8,7 +8,7 @@ public interface IExtension
 
     public void Load();
 
-    public bool OnPacket(int id, byte[] data, TcpClient incoming , List<TcpClient> clients);
+    public bool? OnPacket(int id, byte[] data, TcpClient incoming , List<TcpClient> clients);
 
-    public Func<int, byte[], TcpClient, List<TcpClient>, bool> GetOnPacket();
+    public Func<int, byte[], TcpClient, List<TcpClient>, bool?> GetOnPacket();
 }

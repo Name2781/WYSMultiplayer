@@ -1,11 +1,123 @@
 using System.Net;
 using System.Net.Sockets;
 using Server.Types;
+using System.Text;
 
 namespace Networking
 {
     public class Packets
     {
+        public static void ResizeObject(GameObject obj, TcpClient client)
+        {
+            byte[] message = new byte[268];
+
+            Stream buffer = new MemoryStream(message);
+
+            using (var writer = new BinaryWriter(buffer))
+            {
+                writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
+                writer.Write((short)12);
+                writer.Write((short)4);
+                writer.Write(obj.xscale);
+                writer.Write(obj.yscale);
+                writer.Write(obj.id);
+            }
+
+            client.GetStream().Write(message, 0, message.Length);
+        }
+
+        public static void MoveObject(GameObject obj, TcpClient client)
+        {
+            byte[] message = new byte[268];
+
+            Stream buffer = new MemoryStream(message);
+
+            using (var writer = new BinaryWriter(buffer))
+            {
+                writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
+                writer.Write((short)12);
+                writer.Write((short)2);
+                writer.Write(obj.x);
+                writer.Write(obj.y);
+                writer.Write(obj.id);
+            }
+
+            client.GetStream().Write(message, 0, message.Length);
+        }
+
+        public static void RemoveObject(GameObject obj, TcpClient client)
+        {
+            byte[] message = new byte[268];
+
+            Stream buffer = new MemoryStream(message);
+
+            using (var writer = new BinaryWriter(buffer))
+            {
+                writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
+                writer.Write((short)12);
+                writer.Write((short)1);
+                writer.Write(obj.id);
+            }
+
+            client.GetStream().Write(message, 0, message.Length);
+        }
+
+        private static async Task<int> GetId(TcpClient client)
+        {
+            Byte[] bytes = new Byte[268];  
+            int i;
+            int id = 0;
+
+            NetworkStream stream = client.GetStream();
+            while((i = stream.Read(bytes, 0, bytes.Length)) !=0)
+            {
+                Stream buffer = new MemoryStream(bytes[12..bytes.Length]); // why does gm add 12 garbage bytes idk but fuck them for it
+
+                using (var reader = new BinaryReader(buffer, Encoding.Unicode, false))
+                {   
+                    switch (reader.ReadInt16())
+                    {
+                        case 12:
+                            id = reader.ReadInt32();
+                            return id;
+                    }
+                }
+            }
+
+            return id;
+            // await Task.Run(() => );
+        }
+
+        public static int AddObject(string name, string layer, TcpClient client, int x, int y)
+        {
+            byte[] message = new byte[268];
+
+            Stream buffer = new MemoryStream(message);
+
+            using (var writer = new BinaryWriter(buffer))
+            {
+                writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
+                writer.Write((short)12);
+                writer.Write((short)0);
+                writer.Write(Encoding.ASCII.GetBytes(name));
+                writer.Write((byte)0);
+                writer.Write(Encoding.ASCII.GetBytes(layer));
+                writer.Write((byte)0);
+                writer.Write(x);
+                writer.Write(y);
+            }
+
+            client.GetStream().Write(message, 0, message.Length);
+
+            var res = GetId(client);
+
+            Task.WaitAll(res);
+
+            int id = res.Result;
+
+            return id;
+        }
+
         public static void playerJoinSequence(List<TcpClient> clients, TcpClient newPlayer, List<PlayerData> playerDatas)
         {
             byte[] message = new byte[268];
