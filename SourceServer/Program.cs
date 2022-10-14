@@ -66,8 +66,8 @@ class WYSMPServer
 
         PlayerData plrData = new PlayerData();
 
-        // try
-        // {
+        try
+        {
             Byte[] bytes = new Byte[268];  
 
             plrData.team = new Byte[0];
@@ -230,7 +230,7 @@ class WYSMPServer
             } 
 
             client.Close();
-        /*}
+        }
         catch
         {
             Logger.Log("Disconnecing a client due to an error or them leaving");
@@ -240,6 +240,6 @@ class WYSMPServer
             clients.Remove(client);
             playerDatas.Remove(plrData);
             client.Close();
-        } */
+        }
     }
 }
