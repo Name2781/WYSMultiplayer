@@ -884,6 +884,36 @@ switch(msgid)
                     image_yscale = global.Ny
                 }
                 break;
+
+            case 5:
+                var Cx = buffer_read(buffer, buffer_s32)
+                var Cy = buffer_read(buffer, buffer_s32)
+                var Ctext = buffer_read(buffer, buffer_string)
+                var Cxscale = buffer_read(buffer, buffer_f32)
+	    	    var Cyscale = buffer_read(buffer, buffer_f32)
+                var Cangle = buffer_read(buffer, buffer_s32)
+                var Cstay = buffer_read(buffer, buffer_f32)
+
+                var data = buffer_create(256, buffer_grow, 1);
+
+                buffer_write(data, buffer_s32, Cx)
+                buffer_write(data, buffer_s32, Cy)
+                buffer_write(data, buffer_f32, Cxscale)
+                buffer_write(data, buffer_f32, Cyscale)
+                buffer_write(data, buffer_s32, Cangle)
+
+                ds_list_add(global.hold, Cstay)
+                ds_list_add(global.texts, Ctext)
+                ds_list_add(global.datas, data)
+
+                break;
+
+            case 6:
+                ds_list_clear(global.hold)
+                ds_list_clear(global.texts)
+                ds_list_clear(global.datas)
+
+                break;
         }
 
         break;

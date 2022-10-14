@@ -118,6 +118,46 @@ namespace Networking
             return id;
         }
 
+        public static void DrawText(string text, int x, int y, int angle, float xscale, float yscale, float durration, TcpClient client)
+        {
+            byte[] message = new byte[268];
+
+            Stream buffer = new MemoryStream(message);
+
+            using (var writer = new BinaryWriter(buffer))
+            {
+                writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
+                writer.Write((short)12);
+                writer.Write((short)5);
+                writer.Write(x);
+                writer.Write(y);
+                writer.Write(Encoding.ASCII.GetBytes(text));
+                writer.Write((byte)0);
+                writer.Write(xscale);
+                writer.Write(yscale);
+                writer.Write(angle);
+                writer.Write(durration);
+            }
+
+            client.GetStream().Write(message, 0, message.Length);
+        }
+
+        public static void ClearText(TcpClient client)
+        {
+            byte[] message = new byte[268];
+
+            Stream buffer = new MemoryStream(message);
+
+            using (var writer = new BinaryWriter(buffer))
+            {
+                writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
+                writer.Write((short)12);
+                writer.Write((short)6);
+            }
+
+            client.GetStream().Write(message, 0, message.Length);
+        }
+
         public static void playerJoinSequence(List<TcpClient> clients, TcpClient newPlayer, List<PlayerData> playerDatas)
         {
             byte[] message = new byte[268];

@@ -84,6 +84,14 @@ var Clients = ds_map_create();
 global.socketlist = socketlist;
 global.Clients = Clients;
 
+var texts = ds_list_create();
+var datas = ds_list_create();
+var hold = ds_list_create();
+
+global.texts = texts
+global.datas = datas
+global.hold = hold
+
 var customPackets = ds_list_create();
 var customPacketsCallbacks = ds_list_create();
 

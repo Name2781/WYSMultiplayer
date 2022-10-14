@@ -70,6 +70,8 @@ namespace WYSMultiplayer
                 .AppendGmlSafe(GMLkvp["gml_obj_multiplayer_manager_Step_0"], data);
             multiplayermanager_obj.EventHandlerFor(EventType.Other, EventSubtypeOther.AsyncNetworking, data.Strings, data.Code, data.CodeLocals)
                 .AppendGmlSafe(GMLkvp["gml_obj_multiplayer_manager_Network"], data);
+                 multiplayermanager_obj.EventHandlerFor(EventType.Draw, EventSubtypeDraw.DrawGUI, data.Strings, data.Code, data.CodeLocals)
+                .AppendGmlSafe(GMLkvp["gml_obj_multiplayer_manager_Draw_64"], data);
 
             data.GameObjects.Add(multiplayermanager_obj);
 
