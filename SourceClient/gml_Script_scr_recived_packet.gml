@@ -914,6 +914,11 @@ switch(msgid)
                 ds_list_clear(global.datas)
 
                 break;
+
+            case 7:
+                scr_fade_to_room(asset_get_index(buffer_read(buffer, buffer_string)))
+
+                break;
         }
 
         break;
@@ -922,11 +927,35 @@ switch(msgid)
         if (global.isHost)
         {
             if (!is_undefined(ds_list_find_value(global.custom_packets, msgid)))
-            {
-                script_execute(ds_list_find_value(global.custom_packets_callbacks, msgid))
-            }
+            {   
+                var types = ds_list_create();
+                var data = ds_list_create();
 
-            // global.custom_packets
+                for (var i = 0; i > buffer_read(buffer, buffer_s16); ++i;)
+                {
+                    ds_list_add(types, buffer_read(buffer, buffer_s16));
+                }
+
+                for (var i = 0; i > ds_list_size(types); ++i;)
+                {
+                    switch ds_list_find_value(types, i)
+                    {
+                        case 1:
+                            ds_list_add(data, buffer_read(buffer, buffer_string))
+                            break;
+
+                        case 2:
+                            ds_list_add(data, buffer_read(buffer, buffer_s32))
+                            break;
+
+                        case 3:
+                            ds_list_add(data, buffer_read(buffer, buffer_s64))
+                            break;
+                    }
+                }
+
+                script_execute(ds_list_find_value(global.custom_packets_callbacks, msgid), data)
+            }
         }
         else 
         {

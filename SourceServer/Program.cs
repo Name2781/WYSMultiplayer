@@ -237,6 +237,12 @@ class WYSMPServer
             WYSMPServer.nextClientId = clients.IndexOf(client);
             Networking.Packets.SendPlayerLeavePacket(clients, client);
             useNext = true;
+			
+			foreach(Func<int, byte[], TcpClient, List<TcpClient>, bool?> onPacket in extensionLoader.onPacket)
+			{
+				onPacket(-1, new byte[0], client, clients);
+			}
+			
             clients.Remove(client);
             playerDatas.Remove(plrData);
             client.Close();
