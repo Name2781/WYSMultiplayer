@@ -4,6 +4,7 @@ using System.Text;
 using Server.Types;
 using Server;
 using MP.Extensions;
+using MP;
 
 class WYSMPServer
 {
@@ -136,6 +137,7 @@ class WYSMPServer
                             break;
 
                         case 6:
+                            /*
                             List<byte> name = new List<byte>();
                             byte nB;
                             
@@ -144,7 +146,8 @@ class WYSMPServer
                                 name.Add(nB);
                             }
 
-                            plrData.name = (byte[])name.ToArray();
+                            plrData.name = (byte[])name.ToArray(); */
+                            plrData.name = reader.ReadGMString();
                             break;
 
                         case 7:
