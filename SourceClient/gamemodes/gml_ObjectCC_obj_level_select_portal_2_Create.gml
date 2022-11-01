@@ -1,6 +1,6 @@
 y = obj_level_selection.y
 
-level = room_multiplayer
+level = mp_basketball
 beaten_on_diff = 0
 beaten_on_diff_underw = 0
 type = 1
