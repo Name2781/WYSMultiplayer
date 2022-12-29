@@ -71,7 +71,7 @@ namespace Networking
             NetworkStream stream = client.GetStream();
             while((i = stream.Read(bytes, 0, bytes.Length)) !=0)
             {
-                Stream buffer = new MemoryStream(bytes[12..bytes.Length]); // why does gm add 12 garbage bytes idk but fuck them for it
+                Stream buffer = new MemoryStream(bytes[12..bytes.Length]);
 
                 using (var reader = new BinaryReader(buffer, Encoding.Unicode, false))
                 {   
@@ -88,7 +88,7 @@ namespace Networking
             // await Task.Run(() => );
         }
 
-        public static int AddObject(string name, string layer, TcpClient client, int x, int y)
+        public static int AddObject(string name, string layer, TcpClient client, int x, int y, float xscale, float yscale)
         {
             byte[] message = new byte[268];
 
@@ -105,6 +105,8 @@ namespace Networking
                 writer.Write((byte)0);
                 writer.Write(x);
                 writer.Write(y);
+                writer.Write(xscale);
+                writer.Write(yscale);
             }
 
             client.GetStream().Write(message, 0, message.Length);

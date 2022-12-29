@@ -842,6 +842,8 @@ switch(msgid)
 
                 createdObj.x = buffer_read(buffer, buffer_s32);
                 createdObj.y = buffer_read(buffer, buffer_s32);
+                createdObj.image_xscale = buffer_read(buffer, buffer_f32)
+                createdObj.image_yscale = buffer_read(buffer, buffer_f32)
 
                 buffer_seek(buff, buffer_seek_start, 0);
 
@@ -918,6 +920,56 @@ switch(msgid)
             case 7:
                 scr_fade_to_room(asset_get_index(buffer_read(buffer, buffer_string)))
 
+                break;
+            case 8:
+                var dtype = buffer_read(buffer, buffer_s8)
+                var data = undefined
+
+                switch (dtype)
+                {
+                    case 0:
+                        data = buffer_read(buffer, buffer_bool)
+                        break;
+                    case 1:
+                        data = buffer_read(buffer, buffer_text)
+                        break;
+                    case 2:
+                        data = buffer_read(buffer, buffer_s32)
+                        break;
+                    case 3:
+                        data = buffer_read(buffer, buffer_f32)
+                        break;
+                }
+
+                variable_global_set(buffer_read(buffer, buffer_text), data)
+                break;
+            case 9:
+                var roomAsset = asset_get_index(buffer_read(buffer, buffer_s32))
+                room_set_width(roomAsset, buffer_read(buffer, buffer_s32))
+                room_set_height(roomAsset, buffer_read(buffer, buffer_s32))
+                break;
+            case 10:
+                var dtype = buffer_read(buffer, buffer_s8)
+                global.data = undefined
+                global.setVar = buffer_read(buffer, buffer_text)
+
+                switch (dtype)
+                {
+                    case 0:
+                        global.data = buffer_read(buffer, buffer_bool)
+                        break;
+                    case 1:
+                        global.data = buffer_read(buffer, buffer_text)
+                        break;
+                    case 2:
+                        global.data = buffer_read(buffer, buffer_s32)
+                        break;
+                    case 3:
+                        global.data = buffer_read(buffer, buffer_f32)
+                        break;
+                }
+
+                variable_instance_set(buffer_read(buffer, buffer_s32), global.setVar, global.data)
                 break;
         }
 

@@ -134,6 +134,10 @@ namespace WYSMultiplayer
 
             data.Rooms.Add(mp_room);
 
+            UndertaleRoom ss_room = Conviences.CreateBlankLevelRoom("room_server", data);
+            ss_room.SetupRoom(false);
+            data.Rooms.Add(ss_room);
+
             UndertaleRoom levelselect = data.Rooms.First(room => room.Name.Content == "level_select");
 
             UndertaleRoom.GameObject gameobj = levelselect.GameObjects.First(obj => obj.ObjectDefinition.Name.Content == "obj_player");
