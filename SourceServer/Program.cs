@@ -246,7 +246,6 @@ class WYSMPServer
         {
             Logger.Log("Disconnecing a client due to an error or them leaving");
             WYSMPServer.nextClientId = clients.IndexOf(client);
-            Networking.Packets.SendPlayerLeavePacket(clients, client);
             useNext = true;
 			
 			foreach(Func<int, byte[], TcpClient, List<TcpClient>, bool?> onPacket in extensionLoader.onPacket)
@@ -257,6 +256,8 @@ class WYSMPServer
             clients.Remove(client);
             playerDatas.Remove(plrData);
             client.Close();
+
+            Networking.Packets.SendPlayerLeavePacket(clients, (short)WYSMPServer.nextClientId);
         }
     }
 }

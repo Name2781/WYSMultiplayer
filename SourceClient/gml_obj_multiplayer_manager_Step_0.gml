@@ -152,6 +152,20 @@ else {
     } else {
         if (global.state == "inGame" && global.isReady) {
             // TODO: send if the player is jumping and spawn particles
+
+            if (keyboard_check_pressed(ord("E")))
+            {
+                var buff = buffer_create(256, buffer_grow, 1);
+
+                buffer_seek(buff, buffer_seek_start, 0);
+
+                buffer_write(buff, buffer_s16, 13);
+
+                network_send_packet(global.clientTCP, buff, buffer_get_size(buff));
+
+                buffer_delete(buff);
+            }
+
             if (obj_player.x != global.oldx || obj_player.y != global.oldy)
             {
                 scr_send_position(obj_player.x, obj_player.y, obj_player.hspeed, obj_player.vspeed, global.input_x, global.input_jump, room, global.isSpectator);

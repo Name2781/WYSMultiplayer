@@ -406,7 +406,7 @@ namespace Networking
             clients[target].GetStream().Write(message, 0, message.Length);
         }
 
-        public static void SendPlayerLeavePacket(List<TcpClient> clients, TcpClient socket)
+        public static void SendPlayerLeavePacket(List<TcpClient> clients, short socket)
         {
             byte[] message = new byte[268];
 
@@ -416,14 +416,11 @@ namespace Networking
             {
                 writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
                 writer.Write((short)3);
-                writer.Write((short)clients.IndexOf(socket));
+                writer.Write(socket);
             }
 
             foreach (TcpClient client in clients)
             {
-                if (client.Equals(socket))
-                    continue;
-
                 client.GetStream().Write(message, 0, message.Length);
             }
         }

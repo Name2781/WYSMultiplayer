@@ -971,6 +971,10 @@ switch(msgid)
 
                 variable_instance_set(buffer_read(buffer, buffer_s32), global.setVar, global.data)
                 break;
+            case 11:
+                obj_player.x = buffer_read(buffer, buffer_f32)
+                obj_player.y = buffer_read(buffer, buffer_f32)
+                break;
         }
 
         break;
