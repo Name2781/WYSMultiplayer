@@ -43,6 +43,27 @@ else {
     global.iteration = 0;
 
     if(global.isHost && global.isReady) {
+        /*for (var i = 0; i < instance_number(obj_squasher); ++i;)
+        {
+            var serverBuff = buffer_create(256, buffer_grow, 1);
+
+            buffer_write(serverBuff, buffer_s16, 14);
+            buffer_write(serverBuff, buffer_u16, room)
+            buffer_write(serverBuff, buffer_string, "obj_squasher");
+            buffer_write(serverBuff, buffer_s16, i);
+            buffer_write(serverBuff, buffer_s16, instance_find(obj_squasher, i).x);
+            buffer_write(serverBuff, buffer_s16, instance_find(obj_squasher, i).y);
+            buffer_write(serverBuff, buffer_f32, instance_find(obj_squasher, i).hspeed);
+            buffer_write(serverBuff, buffer_f32, instance_find(obj_squasher, i).vspeed);
+
+            for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
+            {
+                network_send_packet(ds_list_find_value(global.socketlist, i), serverBuff, buffer_tell(serverBuff));
+            }
+
+            buffer_delete(serverBuff);
+        }*/
+
         if (obj_player.x != global.oldx || obj_player.y != global.oldy)
         {
             var serverBuff = buffer_create(256, buffer_grow, 1);
@@ -62,19 +83,19 @@ else {
 
             global.oldx = obj_player.x;
             global.oldy = obj_player.y;
+
+            for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
+            {
+                network_send_packet(ds_list_find_value(global.socketlist, i), serverBuff, buffer_tell(serverBuff));
+            }
+
+            buffer_delete(serverBuff);
         }
 
         // scr_player_add_team(1, "Bozo", "Blind")
         // scr_player_add_team(obj_player, "Blind", "immajustsetthistoafaketeam")
 
         // show_debug_message(obj_player.team)
-
-        for (var i = 0; i < ds_list_size(global.socketlist); ++i;)
-        {
-            network_send_packet(ds_list_find_value(global.socketlist, i), serverBuff, buffer_tell(serverBuff));
-        }
-
-        buffer_delete(serverBuff);
 
         var diffBuff = buffer_create(256, buffer_grow, 1);
 		
@@ -109,7 +130,7 @@ else {
             {
                 if (!dead)
                 {
-                    if (old = 1)
+                    if (old == 1)
                     {
                         dead = 1
                         powery = (13 + random(6))
@@ -190,7 +211,7 @@ else {
                 {
                     if (!dead)
                     {
-                        if (old = 1)
+                        if (old == 1)
                         {
                             dead = 1
                             powery = (13 + random(6))

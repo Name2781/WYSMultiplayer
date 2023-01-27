@@ -7,6 +7,8 @@ plugins
 lang.txt
 countLines.sh
 
+Tester
+
 # User-specific files
 *.rsuser
 *.suo

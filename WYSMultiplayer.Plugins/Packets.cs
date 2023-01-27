@@ -45,6 +45,22 @@ namespace Networking
             client.GetStream().Write(message, 0, message.Length);
         }
 
+        public static void RedrawWalls(TcpClient client)
+        {
+            byte[] message = new byte[268];
+
+            Stream buffer = new MemoryStream(message);
+
+            using (var writer = new BinaryWriter(buffer))
+            {
+                writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
+                writer.Write((short)12);
+                writer.Write((short)12);
+            }
+
+            client.GetStream().Write(message, 0, message.Length);
+        }
+
         public static void RemoveObject(GameObject obj, TcpClient client)
         {
             byte[] message = new byte[268];

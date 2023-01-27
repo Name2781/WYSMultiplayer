@@ -34,6 +34,14 @@ namespace WYSMultiplayer
 
             LoadGMLFolderRecursive(gmlfolder);
 
+            CreateScriptFromKVP(data, "debug_log", "gml_GlobalScript_debug_log", 1);
+
+            UndertaleGlobalInit handler = new UndertaleGlobalInit();
+            handler.Code = CreateScriptFromKVP(data, "gml_GlobalScript_error_handler_init", "gml_GlobalScript_error_handler_init", 1).Code;
+            data.CreateInlineFunction(handler.Code.Name.Content, "error_handler", GMLkvp["gml_Script_error_handler"], 1);
+            // data.CreateInlineFunction(handler.Code.Name.Content, "debug_log", GMLkvp["gml_Script_debug_log"], 1);
+            data.GlobalInitScripts.Add(handler);
+
             UndertaleGameObject mp_player_obj = new UndertaleGameObject();
 
             mp_player_obj.Name = data.Strings.MakeString("obj_mp_player");
@@ -135,6 +143,9 @@ namespace WYSMultiplayer
             data.Rooms.Add(mp_room);
 
             UndertaleRoom ss_room = Conviences.CreateBlankLevelRoom("room_server", data);
+            ss_room.SetupRoom(false);
+            ss_room.AddObjectToLayer(data, "obj_post_processing_draw", "PostProcessing").X = -180;
+            ss_room.AddObjectToLayer(data, "obj_player", "Player");     
             ss_room.SetupRoom(false);
             data.Rooms.Add(ss_room);
 

@@ -46,7 +46,7 @@ if place_meeting(x, y, obj_player)
             }
             if (sound_cooldown <= 0)
             {
-                sound = audio_play_sound_at(choose(37, 38, 39), x, y, 100, 200, 1000, 1, false, 0.6)
+                sound = audio_play_sound_at(choose(sou_landing_1, sou_landing_2, sou_landing_3), x, y, 100, 200, 1000, 1, false, 0.6)
                 audio_sound_gain_fx(sound, clamp((speed / 13), 0, 1), 0)
                 audio_sound_pitch(sound, (0.3 + (speed * 0.02)))
                 sound_cooldown = 5
@@ -115,7 +115,7 @@ if place_meeting(x, y, obj_basketboss)
         }
         if (sound_cooldown <= 0)
         {
-            sound = audio_play_sound_at(choose(37, 38, 39), x, y, 100, 200, 1000, 1, false, 0.6)
+            sound = audio_play_sound_at(choose(sou_landing_1, sou_landing_2, sou_landing_3), x, y, 100, 200, 1000, 1, false, 0.6)
             audio_sound_gain_fx(sound, clamp((speed / 13), 0, 1), 0)
             audio_sound_pitch(sound, (0.3 + (speed * 0.02)))
             sound_cooldown = 5
@@ -185,7 +185,7 @@ if bounced
 {
     if (speed > 1)
     {
-        sound = audio_play_sound_at(choose(37, 38, 39), x, y, 200, 300, 1000, 0.5, false, 0.4)
+        sound = audio_play_sound_at(choose(sou_landing_1, sou_landing_2, sou_landing_3), x, y, 200, 300, 1000, 0.5, false, 0.4)
         audio_sound_gain_fx(sound, clamp((speed / 13), 0, 1), 0)
         audio_sound_pitch(sound, (1.3 + (speed * 0.02)))
     }

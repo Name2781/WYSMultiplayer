@@ -3,6 +3,10 @@ socket = argument1;
 
 msgid = buffer_read(buffer, buffer_s16);
 
+buffer_copy(buffer, 0, 256, global.currentPacketData, 0);
+
+debug_log("Recived packet with id " + string(msgid) + " from " + string(socket))
+
 if (ds_map_size(global.Clients) == 0 && global.isHost) {
     return false;
 }
@@ -918,8 +922,7 @@ switch(msgid)
                 break;
 
             case 7:
-                scr_fade_to_room(asset_get_index(buffer_read(buffer, buffer_string)))
-
+                room_goto(asset_get_index(buffer_read(buffer, buffer_string)))
                 break;
             case 8:
                 var dtype = buffer_read(buffer, buffer_s8)
@@ -944,7 +947,7 @@ switch(msgid)
                 variable_global_set(buffer_read(buffer, buffer_text), data)
                 break;
             case 9:
-                var roomAsset = asset_get_index(buffer_read(buffer, buffer_s32))
+                var roomAsset = asset_get_index(buffer_read(buffer, buffer_text))
                 room_set_width(roomAsset, buffer_read(buffer, buffer_s32))
                 room_set_height(roomAsset, buffer_read(buffer, buffer_s32))
                 break;
@@ -969,14 +972,29 @@ switch(msgid)
                         break;
                 }
 
-                variable_instance_set(buffer_read(buffer, buffer_s32), global.setVar, global.data)
+                variable_instance_set(instance_id_get(buffer_read(buffer, buffer_s32)), global.setVar, global.data)
                 break;
             case 11:
                 obj_player.x = buffer_read(buffer, buffer_f32)
                 obj_player.y = buffer_read(buffer, buffer_f32)
                 break;
+            case 12:
+                scr_split_walls()
+				scr_create_wall_lines()
+				break;
         }
 
+        break;
+
+    case 14:
+        if (room != buffer_read(buffer, buffer_u16))
+            break;
+
+        var obj = instance_find(asset_get_index(buffer_read(buffer, buffer_string)), buffer_read(buffer, buffer_s16))
+        obj.x = buffer_read(buffer, buffer_s16)
+        obj.y = buffer_read(buffer, buffer_s16)
+        obj.hspeed = buffer_read(buffer, buffer_f32)
+        obj.vspeed = buffer_read(buffer, buffer_f32)
         break;
 
     default:
@@ -1005,7 +1023,7 @@ switch(msgid)
                             break;
 
                         case 3:
-                            ds_list_add(data, buffer_read(buffer, buffer_s64))
+                            ds_list_add(data, buffer_read(buffer, buffer_bool))
                             break;
                     }
                 }

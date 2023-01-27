@@ -27,8 +27,8 @@ for (var i = 0; i < ds_list_size(global.texts); ++i;)
     var dangle = buffer_read(data, buffer_s32)
     var dstay = buffer_read(data, buffer_f32)
 
-    draw_set_halign(fa_top);
-    draw_set_valign(fa_left);
+    draw_set_valign(fa_top);
+    draw_set_halign(fa_left);
 
     var text = ds_list_find_value(global.texts, i)
 

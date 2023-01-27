@@ -7,6 +7,7 @@ global.killhat = 0
 global.team = ""
 global.oldx = 0;
 global.oldy = 0;
+global.currentPacketData = buffer_create(256, buffer_grow, 1);
 
 if (!global.justReset)
 {
@@ -33,6 +34,8 @@ if show_question("Host a game?") {
     global.isReady = true;
 
     global.state = "inGame";
+    
+    debug_log("Hosting game")
 
     if room_exists(T_01_first_contact)
     {
@@ -44,6 +47,8 @@ if show_question("Host a game?") {
     global.port = get_integer("Enter the port: ", "25565");
     global.name = get_string("Enter your name: ", "Player");
     global.isSpectator = show_question("Spectate?");
+    
+    debug_log("Joining game")
 
     if (global.isSpectator)
         obj_player.visible = false;
