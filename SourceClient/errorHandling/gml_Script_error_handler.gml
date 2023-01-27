@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 show_debug_message( "--------------------------------------------------------------");
 show_debug_message( "Unhandled exception " + string(argument0) );
 show_debug_message( "--------------------------------------------------------------");
