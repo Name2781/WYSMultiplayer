@@ -8,6 +8,7 @@ global.team = ""
 global.oldx = 0;
 global.oldy = 0;
 global.currentPacketData = buffer_create(256, buffer_grow, 1);
+global.lastPackets = ds_list_create()
 
 if (!global.justReset)
 {

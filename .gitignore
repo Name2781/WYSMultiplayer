@@ -3,11 +3,12 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# Tools that I use that dont need to be in the repo
 plugins
 lang.txt
 countLines.sh
-
 Tester
+PacketAnalyzer
 
 # User-specific files
 *.rsuser

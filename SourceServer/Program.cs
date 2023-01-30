@@ -137,16 +137,6 @@ class WYSMPServer
                             break;
 
                         case 6:
-                            /*
-                            List<byte> name = new List<byte>();
-                            byte nB;
-                            
-                            while ((nB = reader.ReadByte()) != (byte)0)
-                            {
-                                name.Add(nB);
-                            }
-
-                            plrData.name = (byte[])name.ToArray(); */
                             plrData.name = reader.ReadGMString();
                             break;
 

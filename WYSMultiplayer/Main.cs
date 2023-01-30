@@ -1,7 +1,6 @@
 ﻿using GmmlPatcher;
 using UndertaleModLib;
 using UndertaleModLib.Models;
-using UndertaleModLib.Decompiler;
 using GmmlHooker;
 using TSIMPH;
 
@@ -11,8 +10,6 @@ namespace WYSMultiplayer
     {
         // from snailax source
         public static Dictionary<string, string> GMLkvp = new Dictionary<string, string>();
-
-        public static GlobalDecompileContext? GDC;
 
         public static bool LoadGMLFolder(string gmlfolder)
         {
@@ -28,11 +25,8 @@ namespace WYSMultiplayer
         public void Load(int audioGroup, UndertaleData data, ModData currentMod)
         {
             if (audioGroup != 0) return;
-            GDC = new GlobalDecompileContext(data, false);
-            //supress vs being stupid (i mean he's not wrong)
-            string gmlfolder = Path.Combine(currentMod.path, "GMLSource");
 
-            LoadGMLFolderRecursive(gmlfolder);
+            LoadGMLFolderRecursive(Path.Combine(currentMod.path, "GMLSource"));
 
             CreateScriptFromKVP(data, "debug_log", "gml_GlobalScript_debug_log", 1);
 

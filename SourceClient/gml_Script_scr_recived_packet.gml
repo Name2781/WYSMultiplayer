@@ -1,11 +1,19 @@
 buffer = argument0;
 socket = argument1;
 
+if (buffer_get_size(buffer) < 256)
+	return 0;
+
 msgid = buffer_read(buffer, buffer_s16);
 
 buffer_copy(buffer, 0, 256, global.currentPacketData, 0);
 
-debug_log("Recived packet with id " + string(msgid) + " from " + string(socket))
+ds_list_add(global.lastPackets, msgid)
+
+if (ds_list_size(global.lastPackets) > 20)
+{
+	ds_list_delete(global.lastPackets, 11)
+}
 
 if (ds_map_size(global.Clients) == 0 && global.isHost) {
     return false;
@@ -137,8 +145,14 @@ switch(msgid)
                 instance_destroy();
             }
         }
-
-        with(global.plr) { instance_destroy(); }
+		
+		if (variable_global_exists("plr"))
+		{
+			if (global.plr != undefined && instance_exists(global.plr))
+			{
+				with(global.plr) { instance_destroy(); }
+			}
+		}
 
         ds_map_delete(global.Clients, sId);
 
@@ -277,6 +291,9 @@ switch(msgid)
 
     case 8: // HAT
         var created_hat = undefined;
+        
+        if (!instance_exists(obj_player))
+        	break;
 
         if (global.isHost) { 
             global.hatId = buffer_read(buffer, buffer_s8)
@@ -841,6 +858,15 @@ switch(msgid)
                 var type = buffer_read(buffer, buffer_string)
 
                 var layer = buffer_read(buffer, buffer_string)
+                
+                if (!asset_get_index(type) > -1)
+                {
+                	type = "obj_wall"
+                }
+                if (!layer_exists(layer))
+                {
+                	layer = "Walls"
+                }
 
                 var createdObj = instance_create_layer(0, 0, layer, asset_get_index(type))
 
