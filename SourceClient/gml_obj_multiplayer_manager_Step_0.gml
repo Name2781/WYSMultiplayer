@@ -34,6 +34,20 @@ if (global.isSpectator && variable_global_exists("spectating")) {
     }
 }
 
+if (keyboard_check_pressed(vk_control))
+{
+	if (keyboard_check_pressed(vk_shift))
+	{
+		if (keyboard_check_pressed(ord("d")))
+		{
+		    debug_log("Replaying saved packet")
+		    show_debug_message("Replaying saved packet")
+			var badPacket = buffer_load("packet.bin")
+			scr_recived_packet(badPacket, 0)
+		}
+	}
+}
+
 if (global.iteration < 3) {
     global.iteration = global.iteration + 1;
 

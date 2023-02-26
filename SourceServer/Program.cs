@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using Server.Types;
 using Server;
 using MP.Extensions;
@@ -8,7 +9,7 @@ using MP;
 
 class WYSMPServer
 {
-    public static ExtensionLoader extensionLoader = null;
+    public static ExtensionLoader extensionLoader = new ExtensionLoader("plugins");
     public static int nextClientId = 0;
     static List<TcpClient> clients = new List<TcpClient>();
     static List<PlayerData> playerDatas = new List<PlayerData>();
@@ -16,19 +17,18 @@ class WYSMPServer
 
     public static void Main()
     {
-        TcpListener server=null;
-
-        extensionLoader = new ExtensionLoader("plugins");
+        TcpListener listener = new TcpListener(IPAddress.Any , 25565);;
 
         try
         {
-            TcpListener listener = new TcpListener(IPAddress.Any , 25565);
             TcpClient client;
             listener.Start();
 
             Logger.Log($"Server started on port 25565");
 
             Thread.Sleep(100); 
+
+            new Thread(QueueConsumer).Start();
 
             while (true)
             {
@@ -54,7 +54,7 @@ class WYSMPServer
         }
         finally
         {
-            server.Stop();
+            listener.Stop();
         }
 
         Logger.Log("\nHit enter to continue...");
@@ -64,7 +64,7 @@ class WYSMPServer
     private static void ClientThread(object obj)
     {
         var client = (TcpClient)obj;
-
+        bool exitedAlready = false;
         PlayerData plrData = new PlayerData();
 
         try
@@ -193,7 +193,7 @@ class WYSMPServer
                             break;
 
                         case 6:
-                            Networking.Packets.SendPlayerNamePacket(plrData.name, clients, client);
+                            Networking.Packets.SendPlayerNamePacket(plrData.name ?? Encoding.ASCII.GetBytes("Error"), clients, client);
                             break;
 
                         case 7:
@@ -247,7 +247,43 @@ class WYSMPServer
             playerDatas.Remove(plrData);
             client.Close();
 
-            Networking.Packets.SendPlayerLeavePacket(clients, (short)WYSMPServer.nextClientId);
+            Networking.Packets.SendPlayerLeavePacket(clients, client, (short)WYSMPServer.nextClientId);
+
+            exitedAlready = true;
+        }
+
+        if (!exitedAlready)
+        {
+            Logger.Log("Disconnecing a client");
+            WYSMPServer.nextClientId = clients.IndexOf(client);
+            useNext = true;
+            
+            foreach(Func<int, byte[], TcpClient, List<TcpClient>, bool?> onPacket in extensionLoader.onPacket)
+            {
+                onPacket(-1, new byte[0], client, clients);
+            }
+            
+            clients.Remove(client);
+            playerDatas.Remove(plrData);
+            client.Close();
+
+            Networking.Packets.SendPlayerLeavePacket(clients, client, (short)WYSMPServer.nextClientId);
+        }
+    }
+
+    private static async void QueueConsumer()
+    {
+        while (true)
+        {
+            if (Networking.Packets.queue.Count != 0)
+            {
+                KeyValuePair<byte[], TcpClient> cur = Networking.Packets.queue.Dequeue();
+                await cur.Value.GetStream().WriteAsync(cur.Key, 0, cur.Key.Length);
+            }
+            else
+            {
+                Thread.Sleep(10);
+            }
         }
     }
 }

@@ -7,6 +7,8 @@ namespace Networking
 {
     public class Packets
     {
+        public static Queue<KeyValuePair<byte[], TcpClient>> queue = new Queue<KeyValuePair<byte[], TcpClient>>();
+
         public static void ResizeObject(GameObject obj, TcpClient client)
         {
             byte[] message = new byte[268];
@@ -23,7 +25,7 @@ namespace Networking
                 writer.Write(obj.id);
             }
 
-            client.GetStream().Write(message, 0, message.Length);
+            QueuePacket(client, message);
         }
 
         public static void MoveObject(GameObject obj, TcpClient client)
@@ -42,7 +44,7 @@ namespace Networking
                 writer.Write(obj.id);
             }
 
-            client.GetStream().Write(message, 0, message.Length);
+            QueuePacket(client, message);
         }
 
         public static void RedrawWalls(TcpClient client)
@@ -58,7 +60,7 @@ namespace Networking
                 writer.Write((short)12);
             }
 
-            client.GetStream().Write(message, 0, message.Length);
+            QueuePacket(client, message);
         }
 
         public static void RemoveObject(GameObject obj, TcpClient client)
@@ -75,7 +77,7 @@ namespace Networking
                 writer.Write(obj.id);
             }
 
-            client.GetStream().Write(message, 0, message.Length);
+            QueuePacket(client, message);
         }
 
         private static async Task<int> GetId(TcpClient client)
@@ -94,7 +96,7 @@ namespace Networking
                     switch (reader.ReadInt16())
                     {
                         case 12:
-                            id = reader.ReadInt32();
+                            id = await Task.Run(() => reader.ReadInt32());
                             return id;
                     }
                 }
@@ -125,7 +127,7 @@ namespace Networking
                 writer.Write(yscale);
             }
 
-            client.GetStream().Write(message, 0, message.Length);
+            QueuePacket(client, message);
 
             var res = GetId(client);
 
@@ -151,7 +153,7 @@ namespace Networking
                 writer.Write((byte)0);
             }
 
-            client.GetStream().Write(message, 0, message.Length);
+            QueuePacket(client, message);
         }
 
         public static void DrawText(string text, int x, int y, int angle, float xscale, float yscale, float durration, TcpClient client)
@@ -175,7 +177,7 @@ namespace Networking
                 writer.Write(durration);
             }
 
-            client.GetStream().Write(message, 0, message.Length);
+            QueuePacket(client, message);
         }
 
         public static void ClearText(TcpClient client)
@@ -191,7 +193,15 @@ namespace Networking
                 writer.Write((short)6);
             }
 
-            client.GetStream().Write(message, 0, message.Length);
+            QueuePacket(client, message);
+        }
+
+        private static byte[] AddByte(byte[] original, byte add)
+        {
+            byte[] added = new byte[original.Length + 1];
+            original.CopyTo(added, 0);
+            added.Append(add);
+            return added;
         }
 
         public static void playerJoinSequence(List<TcpClient> clients, TcpClient newPlayer, List<PlayerData> playerDatas)
@@ -206,20 +216,20 @@ namespace Networking
                 writer.Write((short)2);
                 writer.Write((short)clients.IndexOf(newPlayer));
                 writer.Write("");
-                writer.Write(playerDatas[clients.IndexOf(newPlayer)].team);
+                writer.Write(playerDatas[clients.IndexOf(newPlayer)].team ?? AddByte(Encoding.ASCII.GetBytes("Error"), 0));
             }
 
             foreach (TcpClient client in clients)
             {
-                if (client.Equals(newPlayer))
+                if (IsValid(newPlayer, client))
                     continue;
 
-                client.GetStream().Write(message, 0, message.Length);
+                QueuePacket(client, message);
             }
 
             foreach (TcpClient client in clients)
             {
-                if (client.Equals(newPlayer))
+                if (IsValid(newPlayer, client))
                     continue;
 
                 message = new byte[268];
@@ -231,11 +241,11 @@ namespace Networking
                     writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
                     writer.Write((short)4);
                     writer.Write((short)clients.IndexOf(client));
-                    writer.Write(playerDatas[clients.IndexOf(client)].name);
-                    writer.Write(playerDatas[clients.IndexOf(client)].team);
+                    writer.Write(playerDatas[clients.IndexOf(client)].name ?? AddByte(Encoding.ASCII.GetBytes("Error"), 0));
+                    writer.Write(playerDatas[clients.IndexOf(client)].team ?? AddByte(Encoding.ASCII.GetBytes("Error"), 0));
                 }
 
-                newPlayer.GetStream().Write(message, 0, message.Length);
+                QueuePacket(newPlayer, message);
             }
 
             message = new byte[268];
@@ -249,7 +259,7 @@ namespace Networking
                 writer.Write((ushort)0); // EASY = 3, inf easy = 0
             }
 
-            newPlayer.GetStream().Write(message, 0, message.Length);
+            QueuePacket(newPlayer, message);
         }
 
         public static void SendBasketballPacket(short bRoom, float nX, float nY, float nH, float nV, float nS, float nBX, float nBY, float nDir, List<TcpClient> clients, TcpClient player)
@@ -275,10 +285,10 @@ namespace Networking
             
             foreach (TcpClient client in clients)
             {
-                if (client.Equals(player))
+                if (IsValid(player, client))
                     continue;
 
-                client.GetStream().Write(message, 0, message.Length);
+                QueuePacket(client, message);
             }
         }
 
@@ -305,10 +315,10 @@ namespace Networking
 
             foreach (TcpClient client in clients)
             {
-                if (client.Equals(newPlayer))
+                if (IsValid(newPlayer, client))
                     continue;
 
-                client.GetStream().Write(message, 0, message.Length);
+                QueuePacket(client, message);
             }
         }
 
@@ -328,10 +338,10 @@ namespace Networking
 
             foreach (TcpClient client in clients)
             {
-                if (client.Equals(socket))
+                if (IsValid(socket, client))
                     continue;
 
-                client.GetStream().Write(message, 0, message.Length);
+                QueuePacket(client, message);
             }
         }
 
@@ -351,10 +361,10 @@ namespace Networking
 
             foreach (TcpClient client in clients)
             {
-                if (client.Equals(socket))
+                if (IsValid(socket, client))
                     continue;
 
-                client.GetStream().Write(message, 0, message.Length);
+                QueuePacket(client, message);
             }
         }
 
@@ -375,10 +385,10 @@ namespace Networking
 
             foreach (TcpClient client in clients)
             {
-                if (client.Equals(socket))
+                if (IsValid(socket, client))
                     continue;
 
-                client.GetStream().Write(message, 0, message.Length);
+                QueuePacket(client, message);
             }
         }
 
@@ -397,10 +407,10 @@ namespace Networking
 
             foreach (TcpClient client in clients)
             {
-                if (client.Equals(socket))
+                if (IsValid(socket, client))
                     continue;
 
-                client.GetStream().Write(message, 0, message.Length);
+                QueuePacket(client, message);
             }
         }
 
@@ -419,10 +429,10 @@ namespace Networking
                 writer.Write((short)clients.IndexOf(socket));
             }
 
-            clients[target].GetStream().Write(message, 0, message.Length);
+            QueuePacket(clients[target], message);
         }
 
-        public static void SendPlayerLeavePacket(List<TcpClient> clients, short socket)
+        public static void SendPlayerLeavePacket(List<TcpClient> clients, TcpClient leaving, short socket)
         {
             byte[] message = new byte[268];
 
@@ -437,7 +447,10 @@ namespace Networking
 
             foreach (TcpClient client in clients)
             {
-                client.GetStream().Write(message, 0, message.Length);
+                if (IsValid(leaving, client))
+                    continue;
+
+                QueuePacket(client, message);
             }
         }
 
@@ -451,18 +464,33 @@ namespace Networking
             {
                 writer.Write(new byte[] {222, 192, 173, 222, 12, 0, 0, 0, 0, 1, 0, 0});
                 writer.Write((short)9);
-                writer.Write(data.team);
-                writer.Write(data.hideTeam);
+                writer.Write(data.team ?? AddByte(Encoding.ASCII.GetBytes("Error"), 0));
+                writer.Write(data.hideTeam ?? AddByte(Encoding.ASCII.GetBytes("Error"), 0));
                 writer.Write((short)clients.IndexOf(socket));
             }
 
             foreach (TcpClient client in clients)
             {
-                if (client.Equals(socket))
+                if (IsValid(socket, client))
                     continue;
 
-                client.GetStream().Write(message, 0, message.Length);
+                QueuePacket(client, message);
             }
+        }
+
+        private static bool IsValid(TcpClient client, TcpClient check)
+        {
+            if (client != check)
+            {
+                return !client.Connected;
+            }
+
+            return true;
+        }
+
+        private static void QueuePacket(TcpClient client, byte[] data)
+        {
+            queue.Enqueue(new KeyValuePair<byte[], TcpClient>(data, client));
         }
     }
 }

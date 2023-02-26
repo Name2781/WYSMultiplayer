@@ -21,7 +21,7 @@ class ExtensionLoader
             {
                 Assembly assembly = Assembly.LoadFrom(extension);
 
-                Type extClass = assembly.GetTypes()
+                Type? extClass = assembly.GetTypes()
                     .FirstOrDefault(extType => extType.GetInterfaces().Contains(typeof(IExtension)));
                 
                 if(extClass is null) {
@@ -29,7 +29,7 @@ class ExtensionLoader
                     continue;
                 }
                 
-                IExtension ext = (IExtension)Activator.CreateInstance(extClass);
+                IExtension? ext = (IExtension?)Activator.CreateInstance(extClass);
                 if (ext != null)
                 {
                     ext.Load();

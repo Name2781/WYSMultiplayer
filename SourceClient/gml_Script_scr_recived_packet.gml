@@ -2,7 +2,10 @@ buffer = argument0;
 socket = argument1;
 
 if (buffer_get_size(buffer) < 256)
+{
+	debug_log("Discarding bad packet")
 	return 0;
+}
 
 msgid = buffer_read(buffer, buffer_s16);
 
@@ -12,7 +15,7 @@ ds_list_add(global.lastPackets, msgid)
 
 if (ds_list_size(global.lastPackets) > 20)
 {
-	ds_list_delete(global.lastPackets, 11)
+	ds_list_delete(global.lastPackets, 21)
 }
 
 if (ds_map_size(global.Clients) == 0 && global.isHost) {
