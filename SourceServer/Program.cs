@@ -70,7 +70,6 @@ class WYSMPServer
         try
         {
             Byte[] bytes = new Byte[268];  
-
             plrData.team = new Byte[0];
             plrData.teamName = new Byte[0];
 
@@ -85,11 +84,9 @@ class WYSMPServer
             }
 
             NetworkStream stream = client.GetStream();
-
             Networking.Packets.playerJoinSequence(clients, client, playerDatas);
 
             int i;
-
             int x = int.MaxValue;
             int y = int.MaxValue;
             float hspeed = float.MaxValue;
@@ -278,7 +275,9 @@ class WYSMPServer
             if (Networking.Packets.queue.Count != 0)
             {
                 KeyValuePair<byte[], TcpClient> cur = Networking.Packets.queue.Dequeue();
-                await cur.Value.GetStream().WriteAsync(cur.Key, 0, cur.Key.Length);
+
+                if (cur.Value.Connected)
+                    await cur.Value.GetStream().WriteAsync(cur.Key, 0, cur.Key.Length);
             }
             else
             {
