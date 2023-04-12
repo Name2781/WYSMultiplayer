@@ -1,4 +1,5 @@
 
+
 # Will you snail multiplayer
 
 This is a mod that adds online multiplayer to the game Will you snail.
@@ -8,9 +9,9 @@ This is a mod that adds online multiplayer to the game Will you snail.
 There are 2 ways to install this mod you can use [GMML](https://github.com/cgytrus/gmml) or [FLIPS](https://dl.smwcentral.net/11474/floating.zip)
 
 ### Flips
-    Make sure you have downloaded and unzipped the wysmpFLIPS.zip from the releases https://github.com/Name2781/WYSMultiplayer! 
+ Make sure you have downloaded and unzipped the wysmpFLIPS.zip from the releases https://github.com/Name2781/WYSMultiplayer! 
 
-    1. Have Will You Snail on steam.
+   1. Have Will You Snail on steam.
     2. Rightclick Will You Snail on the left sidebar of your steam library.
     3. Click Properties...
     4. Go to betas and click the dropdown, select sandbox.
@@ -25,16 +26,16 @@ There are 2 ways to install this mod you can use [GMML](https://github.com/cgytr
 
 ### GMML
 
-    1. Download and unzip wysmpGMML.zip from the  releases https://github.com/Name2781/WYSMultiplayer! 
+   1. Download and unzip wysmpGMML.zip from the  releases https://github.com/Name2781/WYSMultiplayer! 
     2. install gmml either from the github actions or compile it with the guide on gmmls repo
-    3. open your local game files and copy the mods foldder from the zip to the gmml/mods folder that you installed with gmml
+    3. open your local game files and copy the mods folder from the zip to the gmml/mods folder that you installed with gmml
     4. open you game and it should work
     
 ### Read me
 
-    If the mod is not wokring make sure when you launch the mod the epilesy screen has a custom message and is not defualt if it is the default message then you did not install the mod correctly!
+   If the mod is not wokring make sure when you launch the mod the epilesy screen has a custom message and is not defualt if it is the default message then you did not install the mod correctly!
     
-    Also there is a discord server because yes https://discord.gg/ubznkHTsgF
+   Also there is a discord server because yes https://discord.gg/ubznkHTsgF
 
 ## Keybinds and usage
 
@@ -61,6 +62,6 @@ The mod syncs player positions and hides and shows players based on what levels 
 
 ## Notes
 
-If you find a bug please make a issue on this github with what you were doing whne the bug happened and a screenshot of the error message and I will try to fix it.
+If you find a bug please make a issue on this github with what you were doing when the bug happened and a screenshot of the error message and I will try to fix it.
 
 Also mod has had no or very minimal development in the past few months and has been done for a few months but I didn't release it though for a few reasons anyways its released now.
