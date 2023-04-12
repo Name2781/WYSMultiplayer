@@ -12,24 +12,24 @@ There are 2 ways to install this mod you can use [GMML](https://github.com/cgytr
  Make sure you have downloaded and unzipped the wysmpFLIPS.zip from the releases https://github.com/Name2781/WYSMultiplayer! 
 
    1. Have Will You Snail on steam.
-    2. Rightclick Will You Snail on the left sidebar of your steam library.
-    3. Click Properties...
-    4. Go to betas and click the dropdown, select sandbox.
-    5. Go to Local Files and press verify integrity of game files.
-    6. Download FLIPS using the link provided above this tutorial.
-    7. Open FLIPS Once you've unzipped it.
-    8. Press Apply Patch, and switch files from "Supported ROMS" to "All Files"
-    9. Select wysmp.bps
-    10. Once you've done that, another menu will appear.
-    11. Go to your Will You Snail install directory, you can find this by browsing local files, keep the resulting file explorer window open.
-    12. Select data.win, press apply, and then press apply again.
+   2. Rightclick Will You Snail on the left sidebar of your steam library.
+   3. Click Properties...
+   4. Go to betas and click the dropdown, select sandbox.
+   5. Go to Local Files and press verify integrity of game files.
+   6. Download FLIPS using the link provided above this tutorial.
+   7. Open FLIPS Once you've unzipped it.
+   8. Press Apply Patch, and switch files from "Supported ROMS" to "All Files"
+   9. Select wysmp.bps
+   10. Once you've done that, another menu will appear.
+   11. Go to your Will You Snail install directory, you can find this by browsing local files, keep the resulting file explorer window open.
+   12. Select data.win, press apply, and then press apply again.
 
 ### GMML
 
    1. Download and unzip wysmpGMML.zip from the  releases https://github.com/Name2781/WYSMultiplayer! 
-    2. install gmml either from the github actions or compile it with the guide on gmmls repo
-    3. open your local game files and copy the mods folder from the zip to the gmml/mods folder that you installed with gmml
-    4. open you game and it should work
+   2. install gmml either from the github actions or compile it with the guide on gmmls repo
+   3. open your local game files and copy the mods folder from the zip to the gmml/mods folder that you installed with gmml
+   4. open you game and it should work
     
 ### Read me
 
