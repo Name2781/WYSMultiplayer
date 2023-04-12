@@ -45,11 +45,11 @@ There are 2 ways to install this mod you can use [GMML](https://github.com/cgytr
     
 ### Hosting
 
-To host a game you need to press f5 and pick a name and a port and port forward the port that you picked for the server on your router (by default 25565)
+To host a game you **need** to press f5 and pick a name and a port and port forward the port that you picked for the server on your router (by default 25565)
 
 ### Joining 
 
-Press f5 pick a name enter the hosts ip and the port they picked and if everything was set up right then you should be able to see then inside the waiting room
+Press f5 pick a name enter the hosts ip and the port they picked and if everything was set up right then you *should* be able to see them inside the waiting room
 
 ## Features
 
