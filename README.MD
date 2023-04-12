@@ -41,7 +41,7 @@ There are 2 ways to install this mod you can use [GMML](https://github.com/cgytr
 
 ### Keybinds 
 
-    The keybinds for the mod are f5 to start or join a game and f6 if you are the host to send all the players to the level select.
+   The keybinds for the mod are f5 to start or join a game and f6 if you are the host to send all the players to the level select.
     
 ### Hosting
 
