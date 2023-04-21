@@ -32,7 +32,7 @@ There are 2 ways to install this mod you can use [GMML](https://github.com/cgytr
     
 ### Read me
 
-    If the mod is not wokring make sure when you launch the mod the epilesy screen has a custom message and is not defualt if it is the default message then you did not install the mod correctly!
+    If the mod is not wokring make sure when you launch the mod the epilepsy screen has a custom message and is not defualt if it is the default message then you did not install the mod correctly!
     
     Also there is a discord server because yes https://discord.gg/ubznkHTsgF
 
