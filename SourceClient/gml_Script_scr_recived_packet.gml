@@ -1026,6 +1026,10 @@ switch(msgid)
         obj.vspeed = buffer_read(buffer, buffer_f32)
         break;
 
+    case 210:
+	debug_log("两百一十");
+	break;
+
     default:
         if (global.isHost)
         {
