@@ -1,15 +1,16 @@
-﻿using GmmlPatcher;
-using UndertaleModLib;
+﻿using UndertaleModLib;
 using UndertaleModLib.Models;
-using GmmlHooker;
+using GMHooker;
 using TSIMPH;
+using System.Reflection;
 
 namespace WYSMultiplayer
 {
-    public class GameMakerMod : IGameMakerMod
+    public class GameMakerMod
     {
         // from snailax source
         public static Dictionary<string, string> GMLkvp = new Dictionary<string, string>();
+        public string modPath;
 
         public static bool LoadGMLFolder(string gmlfolder)
         {
@@ -22,11 +23,11 @@ namespace WYSMultiplayer
         }
 
         // my code
-        public void Load(int audioGroup, UndertaleData data, ModData currentMod)
+        public void Load(int audioGroup, UndertaleData data)
         {
             if (audioGroup != 0) return;
-
-            LoadGMLFolderRecursive(Path.Combine(currentMod.path, "GMLSource"));
+            modPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            LoadGMLFolderRecursive(Path.Combine(modPath, "GMLSource"));
 
             CreateScriptFromKVP(data, "debug_log", "gml_GlobalScript_debug_log", 1);
 
