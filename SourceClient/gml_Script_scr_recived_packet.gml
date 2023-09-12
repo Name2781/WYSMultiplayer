@@ -1,12 +1,6 @@
 buffer = argument0;
 socket = argument1;
 
-if (buffer_get_size(buffer) < 256)
-{
-	debug_log("Discarding bad packet")
-	return 0;
-}
-
 msgid = buffer_read(buffer, buffer_s16);
 
 buffer_copy(buffer, 0, 256, global.currentPacketData, 0);

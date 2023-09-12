@@ -4,24 +4,20 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>WYSMultiplayer\</OutputPath>
   </PropertyGroup>
-
   <ItemGroup>
-    <Reference Include="GmmlHooker">
-      <HintPath>lib\GmmlHooker.dll</HintPath>
-    </Reference>
-    <Reference Include="GmmlPatcher">
-      <HintPath>lib\GmmlPatcher.dll</HintPath>
-    </Reference>
-    <Reference Include="TSIMPH_API">
-      <HintPath>lib\TSIMPH_API.dll</HintPath>
-    </Reference>
-    <Reference Include="UndertaleModLib">
-      <HintPath>lib\UndertaleModLib.dll</HintPath>
-    </Reference>
-    <Reference Include="WysApi">
-      <HintPath>lib\WysApi.dll</HintPath>
+    <Reference Include="UndertaleModLib, Culture=neutral, PublicKeyToken=null">
+      <HintPath>.\UndertaleModLib.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
+  <Target Name="CopyToGMLSource" AfterTargets="AfterBuild">
+    <ItemGroup>
+      <GMLSourceFiles Include="../SourceClient\**\*"/>
+    </ItemGroup>
+    <Copy SourceFiles="@(GMLSourceFiles)" DestinationFolder="$(OutputPath)\GMLSource\%(RecursiveDir)" />
+  </Target>
 
 </Project>
